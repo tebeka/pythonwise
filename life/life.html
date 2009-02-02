@@ -70,10 +70,6 @@
             return $.grep(candidates, is_in_board);
         }
 
-        function _is_alive(board, cell) {
-            return board[cell[0]][cell[1]] == ALIVE;
-        }
-
         /* http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules */
         function calc_new_state(current_state, num_alive) {
             if (current_state == ALIVE) {
@@ -99,9 +95,11 @@
 
 
         function on_step() {
+            /* Copy old board since we're going to change the current */
             var board = copy_board();
+
             function is_alive(cell) {
-                return _is_alive(board, cell);
+                return board[cell[0]][cell[1]] == ALIVE;
             }
 
             for (var row = 0; row < NUM_ROWS; ++row) {
