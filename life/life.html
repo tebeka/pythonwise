@@ -116,9 +116,11 @@
         }
 
         function run() {
-            while (RUNNING) {
-                on_step();
+            if (!RUNNING) {
+                return;
             }
+            on_step();
+            setTimeout(run, 100);
         }
 
         function on_run() {
@@ -126,7 +128,7 @@
             if (button.text() == 'Run') {
                 button.text('Stop');
                 RUNNING = 1;
-                setTimeout(0, run);
+                run();
             }
             else {
                 button.text('Run');
