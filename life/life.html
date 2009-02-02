@@ -101,8 +101,7 @@
                     var current_state = is_alive([row, col]) ? ALIVE : DEAD;
                     var new_state = calc_new_state(current_state, num_alive);
                     if (new_state != current_state) {
-                        get_cell(row, col).removeClass(current_state
-                                ).addClass(new_state);
+                        on_click(row, col);
                     }
                 }
             }
