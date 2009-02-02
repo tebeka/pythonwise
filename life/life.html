@@ -6,8 +6,8 @@
                 border: 5px solid black;
             }
             td {
-                width: 10px;
-                height: 10px;
+                width: 15px;
+                height: 15px;
             }
             td.dead {
                 background: green;
@@ -18,16 +18,18 @@
         </style>
     </head>
     <body>
+        <b>Game of Life<b>
         <table id="board">
         </table>
         <button id="run">Run</button>
         <button id="step">Step</button>
+        <button id="clear">Clear</button>
 
     </body>
     <script src="jquery.js"></script>
     <script>
-        var NUM_ROWS = 10;
-        var NUM_COLS = 10;
+        var NUM_ROWS = 30;
+        var NUM_COLS = 30;
         var DEAD = 'dead';
         var ALIVE = 'alive';
         var RUNNING = 0;
@@ -109,7 +111,7 @@
                     var current_state = board[row][col];
                     var new_state = calc_new_state(current_state, num_alive);
                     if (new_state != current_state) {
-                        on_click(row, col);
+                        toggle(row, col);
                     }
                 }
             }
@@ -120,7 +122,7 @@
                 return;
             }
             on_step();
-            setTimeout(run, 100);
+            setTimeout(run, 200);
         }
 
         function on_run() {
@@ -140,7 +142,7 @@
             return BOARD[row][col];
         }
 
-        function on_click(row, col) {
+        function toggle(row, col) {
             var cell = get_cell(row, col);
 
             if (cell.hasClass(ALIVE)) {
@@ -157,7 +159,7 @@
 
         function make_handler(row, col) {
             return function() {
-                on_click(row, col);
+                toggle(row, col);
             }
         }
 
@@ -178,11 +180,23 @@
             }
         }
 
+        function on_clear() {
+            for (var row = 0; row < NUM_ROWS; ++row) {
+                for (var col = 0; col < NUM_COLS; ++col) {
+                    var cell = BOARD[row][col];
+                    if (cell.hasClass(ALIVE)) {
+                        toggle(row, col);
+                    }
+                }
+            }
+        }
+
         function on_ready()
         {
             initiaize_board();
             $('#step').click(on_step);
             $('#run').click(on_run);
+            $('#clear').click(on_clear);
         }
 
         $(document).ready(on_ready);
