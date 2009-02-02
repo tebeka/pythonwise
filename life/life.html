@@ -1,0 +1,195 @@
+<html>
+    <head>
+        <title>Game Of Life</title>
+        <style>
+            table {
+                border: 5px solid black;
+            }
+            td {
+                width: 15px;
+                height: 15px;
+            }
+            td.dead {
+                background: green;
+            }
+            td.alive {
+                background: red;
+            }
+        </style>
+    </head>
+    <body>
+        <b>Game of Life<b>
+        <table id="board">
+        </table>
+        <button id="run">Run</button>
+        <button id="step">Step</button>
+        <button id="clear">Clear</button>
+
+    </body>
+    <script src="jquery.js"></script>
+    <script>
+        var NUM_ROWS = 30;
+        var NUM_COLS = 30;
+        var DEAD = 'dead';
+        var ALIVE = 'alive';
+        var RUNNING = 0;
+        /* We keep this for fast access since jQuery selectors
+        $('#board tr:nth-child(' + row + 1 + ') td:nth-child(' + col + 1 + ')'
+        are slow
+        */
+        var BOARD = [];
+
+        function copy_board() {
+            var board = [];
+            for (var row = 0; row < NUM_ROWS; ++row) {
+                var cells = [];
+                for (col = 0; col < NUM_COLS; ++col) {
+                    var state = get_cell(row, col).hasClass(ALIVE) ?
+                                ALIVE : DEAD;
+                    cells.push(state);
+                }
+                board.push(cells);
+            }
+
+            return board;
+        }
+
+        function is_in_board(cell) {
+            var row = cell[0];
+            var col = cell[1];
+            return (row >= 0) && (row < NUM_ROWS) &&
+                   (col >= 0) && (col < NUM_COLS);
+        }
+
+        function cell_neighbours(row, col) {
+            var candidates = [
+                [row - 1, col - 1], [row - 1, col], [row - 1, col + 1],
+                [row, col - 1], [row, col + 1],
+                [row + 1, col - 1], [row + 1, col], [row + 1, col + 1]
+            ];
+            return $.grep(candidates, is_in_board);
+        }
+
+        /* http://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Rules */
+        function calc_new_state(current_state, num_alive) {
+            if (current_state == ALIVE) {
+                if (num_alive < 2) {
+                    return DEAD;
+                }
+                else if (num_alive > 3) {
+                    return DEAD;
+                }
+                else {
+                    return ALIVE;
+                }
+            }
+            else {
+                if (num_alive == 3) {
+                    return ALIVE;
+                }
+                else {
+                    return DEAD;
+                }
+            }
+        }
+
+
+        function on_step() {
+            /* Copy old board since we're going to change the current */
+            var board = copy_board();
+
+            function is_alive(cell) {
+                return board[cell[0]][cell[1]] == ALIVE;
+            }
+
+            for (var row = 0; row < NUM_ROWS; ++row) {
+                for (var col = 0; col < NUM_COLS; ++col) {
+                    var neighbours = cell_neighbours(row, col);
+                    var num_alive = $.grep(neighbours, is_alive).length;
+                    var current_state = board[row][col];
+                    var new_state = calc_new_state(current_state, num_alive);
+                    if (new_state != current_state) {
+                        toggle(row, col);
+                    }
+                }
+            }
+        }
+
+        function run() {
+            if (!RUNNING) {
+                return;
+            }
+            on_step();
+            setTimeout(run, 200);
+        }
+
+        function on_run() {
+            var button = $('#run');
+            if (button.text() == 'Run') {
+                button.text('Stop');
+                RUNNING = 1;
+                run();
+            }
+            else {
+                button.text('Run');
+                RUNNING = 0;
+            }
+        }
+
+        function get_cell(row, col) {
+            return BOARD[row][col];
+        }
+
+        function toggle(row, col) {
+            var cell = get_cell(row, col);
+
+            if (cell.hasClass(ALIVE)) {
+                var add = DEAD;
+                var remove = ALIVE;
+            }
+            else {
+                var add = ALIVE;
+                var remove = DEAD;
+            }
+
+            cell.removeClass(remove).addClass(add);
+        }
+
+        function make_handler(row, col) {
+            return function() {
+                toggle(row, col);
+            }
+        }
+
+        function initiaize_board() {
+            var table = $('#board');
+            for (var row = 0; row < NUM_ROWS; ++row) {
+                var tr = $('<tr />');
+                var cells = [];
+                for (var col = 0; col < NUM_COLS; ++col) {
+                    var td = $('<td />');
+                    td.addClass(DEAD);
+                    td.click(make_handler(row, col));
+                    tr.append(td);
+                    cells.push(td);
+                }
+                table.append(tr);
+                BOARD.push(cells);
+            }
+        }
+
+        function on_clear() {
+            $('.' + ALIVE).removeClass(ALIVE).addClass(DEAD);
+        }
+
+        function on_ready()
+        {
+            initiaize_board();
+            $('#step').click(on_step);
+            $('#run').click(on_run);
+            $('#clear').click(on_clear);
+        }
+
+        $(document).ready(on_ready);
+    </script>
+</html>

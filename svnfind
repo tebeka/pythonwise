@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+# Find paths matching directories in subversion repository
+
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+
+# TODO:
+# * Limit search depth
+# * Add option to case [in]sensitive
+# * Handling of svn errors
+# * Support more of "find" predicates (-type, -and, -mtime ...)
+# * Another porject: Pre index (using swish-e ...) and update only from
+#   changelog
+
+from os import popen
+
+def join(path1, path2):
+   if not path1.endswith("/"):
+       path1 += "/"
+   return "%s%s" % (path1, path2)
+
+def svn_walk(root):
+   command = "svn ls '%s'" % root
+   for path in popen(command):
+       path = join(root, path.strip())
+       yield path
+       if path.endswith("/"): # A directory
+           for subpath in svn_walk(path):
+                   yield subpath
+
+def main(argv=None):
+   if argv is None:
+       import sys
+       argv = sys.argv
+
+   import re
+   from itertools import ifilter
+   from optparse import OptionParser
+
+   parser = OptionParser("usage: %prog PATH EXPR")
+
+   opts, args = parser.parse_args(argv[1:])
+   if len(args) != 2:
+       parser.error("wrong number of arguments") # Will exit
+
+   path, expr = args
+   try:
+       pred = re.compile(expr, re.I).search
+   except re.error:
+       raise SystemExit("error: bad search expression: %s" % expr)
+
+   found = 0
+   for path in ifilter(pred, svn_walk(path)):
+       found = 1
+       print path
+
+   if not found:
+       raise SystemError("error: nothing matched %s" % expr)
+
+if __name__ == "__main__":
+   main()
