@@ -19,6 +19,9 @@ HTML = '''
     <head>
         <title>Twiver - Refreshing Twitter Search</title>
         <style>
+            h2 {
+                font-variant: small-caps;
+            }
             table#results {
                 border: 1px solid black;
                 width: 100%;
@@ -32,12 +35,13 @@ HTML = '''
         </style>
     </head>
     <body>
-        <h1>Twiver - Refreshing Twitter Search</h1>
-        Query: <input id="query" /> <br />
-        <button id="run">Go</button>
+        <h2>Twiver - Refreshing Twitter Search</h2>
+        Query: <input id="query" size="60" /> <button id="run">Go</button>
         <table id="results">
         </table>
         <span id="updated"></span>
+        <hr />
+        By <a href="mailto:miki.tebeka@gmail.com">Miki</a>
     </body>
     <script src="jquery.js"></script>
     <script>
