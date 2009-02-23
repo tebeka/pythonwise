@@ -1,12 +1,6 @@
 #!/usr/bin/env python
 '''Small calculator'''
 
-# ======================================================#
-# Copyright (c) Miki Tebeka <miki.tebeka@gmail.com>     #
-# This file is under the GNU Public License (GPL), see  #
-# http://www.gnu.org/copyleft/gpl.html for more details #
-# ======================================================#
-
 from __future__ import division # Detault to real devision
 from math import * # Get all math goodies in global namespace
 from optparse import OptionParser

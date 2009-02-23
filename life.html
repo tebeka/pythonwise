@@ -180,14 +180,7 @@
         }
 
         function on_clear() {
-            for (var row = 0; row < NUM_ROWS; ++row) {
-                for (var col = 0; col < NUM_COLS; ++col) {
-                    var cell = BOARD[row][col];
-                    if (cell.hasClass(ALIVE)) {
-                        toggle(row, col);
-                    }
-                }
-            }
+            $('.' + ALIVE).removeClass(ALIVE).addClass(DEAD);
         }
 
         function on_ready()
