@@ -15,9 +15,12 @@ def create_opener(user, password):
     return build_opener(handler)
 
 def open_seen():
+    # writeback=1 means storage will be updated directly, slower but easier
     return shelve.open("%s/.twittalk-seen" % expanduser("~"), writeback=1)
 
 def get_items(fo):
+    # <item><title>...</title><description>...</description><pubDate>...</pubDate>
+    #       <guid>..</guid><link>...</link></item>
     def func(item):
         return map(item.findtext, ("title", "guid"))
 
@@ -35,6 +38,36 @@ def say(text):
     tts("New Twitt") 
     tts(text)
 
+def get_new_messages(opener, seen):
+    def is_new(tg):
+        return tg[1] not in seen
+
+    fo = opener.open(url)
+    for title, guid in filter(is_new, get_items(fo)):
+        seen[guid] = 1
+        yield title
+
+def build_ui(user, password, seen):
+    import Tkinter as tk
+
+    root = tk.Tk()
+    root.title("Twittalk")
+    tk.Label(root, text="User:").grid(row=0, sticky=tk.W)
+    tk.Label(root, text="Password:").grid(row=1, sticky=tk.W)
+    user = tk.Entry(root)
+    user.grid(row=0, column=1)
+    passwd = tk.Entry(root, show="*")
+    passwd.grid(row=1, column=1)
+    start = tk.Button(root, text="Start")
+    start.grid(row=2)
+
+    user.focus()
+
+    root.mainloop()
+
+
+
+
 def main(argv=None):
     if argv is None:
         import sys
@@ -51,6 +84,9 @@ def main(argv=None):
             default="bugs_bunny")
     parser.add_option("-p", "--password", help="password", dest="password",
             default="whats_up_doc")
+    parser.add_option("-g", "--no-gui", help="run without GUI", 
+          dest="gui", action="store_false", default=1)
+
     opts, args = parser.parse_args(argv[1:])
     if args:
         parser.error("wrong number of arguments") # Will exit
@@ -61,11 +97,13 @@ def main(argv=None):
 
     go = iter((1, 0)).next if opts.once else repeat(1).next
 
+    def is_new(tg):
+        return tg[1] not in seen
+
     while go():
+        say_new_message()
         fo = opener.open(url)
-        for title, guid in get_items(fo):
-            if title in seen:
-                continue
+        for title, guid in filter(is_new, get_items(fo)):
             seen[title] = 1
             say(title)
 
