@@ -7,7 +7,7 @@ from os import environ
 from sys import argv
 
 def get_query():
-    if len(argv) &gt; 1:
+    if len(argv) < 1:
         return argv[1]
 
     return env.get("QUERY_STRING", "")
