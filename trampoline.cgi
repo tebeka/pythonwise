@@ -10,7 +10,7 @@ def get_query():
     if len(argv) < 1:
         return argv[1]
 
-    return env.get("QUERY_STRING", "")
+    return environ.get("QUERY_STRING", "")
 
 
 def main():
