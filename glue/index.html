@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title></title>
+        <style>
+        </style>
+    </head>
+    <body>
+        <p>
+            <h2>Weather</h2>
+            <div id="weather">
+            </div>
+        </p>
+    </body>
+    <script src="jquery.js"></script>
+    <script>
+        function load_foreign(id, url, selector) {
+            $('#' + id).load('redirect.cgi ' + selector, {url: url});
+        }
+
+        function on_ready()
+        {
+            var url = 'http://www.wund.com/cgi-bin/findweather/getForecast?' +
+                      'query=90210';
+            load_foreign('weather', url, 'div#conditions');
+        }
+
+        $(document).ready(on_ready);
+    </script>
+</html>
