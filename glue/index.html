@@ -2,14 +2,32 @@
     <head>
         <title></title>
         <style>
+            .header {
+                background: blue;
+                color: white;
+                font-size: 1.3em;
+                font-weight: bold;
+                font-variant: small-caps;
+            }
+            td.section {
+                width: 50%;
+            }
         </style>
     </head>
     <body>
-        <p>
-            <h2>Weather</h2>
-            <div id="weather">
-            </div>
-        </p>
+        <h1>Beverly Hills Meshup</h1>
+        <table width="100%">
+            <tr>
+                <td class="section">
+                    <div class="header">Weather</div>
+                    <div id="weather">Loading ...</div>
+                </td>
+                <td>
+                    <div class="header">News</div>
+                    <div id="news">Loading ...</div> 
+                </td>
+            </tr>
+        </table>
     </body>
     <script src="jquery.js"></script>
     <script>
@@ -22,6 +40,9 @@
             var url = 'http://www.wund.com/cgi-bin/findweather/getForecast?' +
                       'query=90210';
             load_foreign('weather', url, 'div#conditions');
+
+            url = 'http://www.topix.com/city/beverly-hills-ca';
+            load_foreign('news', url, 'div.forum_ww_line');
         }
 
         $(document).ready(on_ready);
