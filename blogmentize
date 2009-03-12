@@ -1,0 +1,23 @@
+#!/bin/bash
+# Generate HTML of code to blog
+
+# Miki Tebeka <miki.tebeka@gmail.com>
+
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "usage: $0 FILE [TYPE]"
+    exit 1
+fi
+
+filename=$1
+if [ ! -f $filename ]; then
+    echo "error: can't find $filename"
+    exit 1
+fi
+
+type=$2
+if [ -z "$type" ]; then
+    # "#!/usr/bin/env python" -> "python"
+    type=`head -1 $filename | xargs -i basename {} | sed -e 's/env //'`
+fi
+
+pygmentize -l $type -f html $filename
