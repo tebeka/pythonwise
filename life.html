@@ -15,10 +15,19 @@
             td.alive {
                 background: red;
             }
+            a {
+                text-decoration: none;
+                color: black;
+            }
+            a:hover {
+                background: silver;
+            }
         </style>
     </head>
     <body>
-        <b>Game of Life<b>
+        <b><a href="http://en.wikipedia.org/wiki/Conway's_Game_of_Life">
+                Game of Life
+        </a><b>
         <table id="board">
         </table>
         <button id="run">Run</button>
@@ -39,19 +48,12 @@
         */
         var BOARD = [];
 
-        function copy_board() {
-            var board = [];
-            for (var row = 0; row < NUM_ROWS; ++row) {
-                var cells = [];
-                for (col = 0; col < NUM_COLS; ++col) {
-                    var state = get_cell(row, col).hasClass(ALIVE) ?
-                                ALIVE : DEAD;
-                    cells.push(state);
-                }
-                board.push(cells);
-            }
+        function get_cell(row, col) {
+            return BOARD[row][col];
+        }
 
-            return board;
+        function cell_state(row, col) {
+            return get_cell(row, col).hasClass('alive') ? ALIVE : DEAD;
         }
 
         function cell_neighbours(row, col) {
@@ -59,6 +61,10 @@
             var downrow = (row - 1) % NUM_ROWS;
             var leftcol = (col - 1) % NUM_COLS;
             var rightcol = (col + 1) % NUM_COLS;
+
+            /* FIXME: Find a better way (since -1 % 10 => -1) */
+            downrow = (downrow < 0) ? NUM_ROWS - 1 : downrow;
+            leftcol = (leftcol < 0) ? NUM_COLS - 1 : leftcol;
 
             return [
                 [uprow, leftcol], [uprow, col], [uprow, rightcol],
@@ -91,9 +97,8 @@
         }
 
         function is_alive(cell) {
-            return board[cell[0]][cell[1]] == ALIVE;
+            return cell_state(cell[0], cell[1]) == ALIVE;
         }
-
 
         function on_step() {
             var changed = [];
@@ -101,7 +106,7 @@
                 for (var col = 0; col < NUM_COLS; ++col) {
                     var neighbours = cell_neighbours(row, col);
                     var num_alive = $.grep(neighbours, is_alive).length;
-                    var current_state = board[row][col];
+                    var current_state = cell_state(row, col);
                     var new_state = calc_new_state(current_state, num_alive);
                     if (new_state != current_state) {
                         changed.push([row, col]);
@@ -121,7 +126,7 @@
                 return;
             }
             on_step();
-            setTimeout(run, 200);
+            setTimeout(run, 100);
         }
 
         function on_run() {
@@ -135,10 +140,6 @@
                 button.text('Run');
                 RUNNING = 0;
             }
-        }
-
-        function get_cell(row, col) {
-            return BOARD[row][col];
         }
 
         function toggle(row, col) {
