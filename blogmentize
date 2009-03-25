@@ -17,7 +17,8 @@ fi
 type=$2
 if [ -z "$type" ]; then
     # "#!/usr/bin/env python" -> "python"
-    type=`head -1 $filename | xargs -i basename {} | sed -e 's/env //'`
+    type=$(head -1 $filename | xargs -i basename {} | 
+           sed -e 's/env //' -e 's/[<>]//g')
 fi
 
 pygmentize -l $type -f html $filename
