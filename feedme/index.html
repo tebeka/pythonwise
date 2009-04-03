@@ -1,0 +1,46 @@
+<html>
+ <head>
+     <title>FeedMe - A Minimal Web Based RSS Reader</title>
+     <link rel="stylesheet" type="text/css" href="feedme.css" />
+     <link rel="shortcut icon" href="feedme.ico" />
+     <style>
+         a {
+             text-decoration: none;
+         }
+         a:hover {
+             background-color: silver;
+         }
+         div.summary {
+             display: none;
+             position: absolute;
+             background: gray;
+             width: 70%;
+             font 18px monospace;
+             border: 1px solid black;
+         }
+     </style>
+ </head>
+ <body>
+     <h2>FeedMe - A Minimal Web Based RSS Reader</h2>
+     <div>
+         Feed URL: <input type="text" size="80" id="feed_url"/>
+         <button onclick="refresh_feed();">Load</button>
+     </div>
+     <hr />
+     <div id="items">
+     <div>
+ </body>
+ <script src="jquery.js"></script>
+ <script>
+     function refresh_feed() {
+         var url = $.trim($("#feed_url").val());
+         if ("" == url) {
+             return;
+         }
+
+         $("#items").load("feed.cgi", {"url" : url});
+         /* Update every minute */
+         setTimeout("refresh_feed();", 1000 * 60);
+     }
+ </script>
+</html>

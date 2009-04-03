@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+'''cut with regular expressions'''
+
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__version__ = "0.2.0"
+
+from sys import stdin
+import re
+from optparse import OptionParser
+
+progname = "ecut" # Program name
+is_range = re.compile("\d+-\d+").match
+
+class FatalError(SystemExit):
+    def __init__(self, message):
+        error_message = "%s: error: %s" % (progname, message)
+        SystemExit.__init__(self, error_message)
+
+parser = OptionParser("usage: %prog [OPTIONS] [FILE]",
+            version="%%prog %s" % __version__)
+default_delimiter = r"\s+"
+parser.add_option("-d", "--delimiter", dest="delim",
+        default=default_delimiter, 
+        help="delimiter to use (defaults to '%s')" % default_delimiter)
+parser.add_option("-f", "--fields", dest="fields", default=[],
+        help="comma seperated list of fields to print", metavar="LIST")
+parser.add_option("--output-delimiter", dest="out_delim", default=" ",
+        help="output delimiter", metavar="STRING")
+parser.add_option("-s", "--only-delimited", dest="only_delim", default=0,
+        help="do not print lines not containing delimiters",
+        action="store_true")
+
+opts, args = parser.parse_args()
+if not opts.fields:
+    raise FatalError("no fields given")
+
+# Compile the delimiter
+try:
+    split = re.compile(opts.delim).split
+except re.error, e:
+    raise FatalError("bad regular expression (%s)" % e.args[0])
+
+if not args:
+    infiles = ["-"]
+else:
+    infiles = args
+
+# Prase fields, we substract 1 since f1 is the 1'st field
+fields = []
+for field in opts.fields.split(","):
+    try:
+        if not is_range(field):
+            fields.append(int(field))
+        else:
+            fs = field.split("-")
+            if len(fs) != 2:
+                raise ValueError
+            if fs[0] and fs[1]:
+                fields.append((int(fs[0]) - 1, int(fs[1]) - 1)) # Full range
+            elif not fs[0]:
+                fields.append((0, int(fs[1]) - 1)) # 0-M
+            else: # M-end
+                fields.append((int(fs[0]) - 1, -1))
+    except ValueError:
+        raise FatalError("bad field: %s" % field)
+
+inttype = type(1) # Ingeter type
+
+# Process input files
+for file in infiles:
+    if file == "-":
+        info = stdin
+    else:
+        try:
+            info = open(file)
+        except IOError, e:
+            raise FatalError("can't open %s - %s" % (file, e.strerror))
+
+    for line in info:
+        out = []
+        fs = filter(lambda x: x, split(line))
+        max = len(fs) - 1
+
+        if opts.only_delim and (len(fs) == 1):
+            continue
+
+        for field in fields:
+            if (type(field) == inttype): # Simple field
+                if field <= max:
+                    out.append(fs[field])
+            else: # Range
+                start = field[0]
+                if field[1] == -1:
+                    end = max
+                else:
+                    end = min(field[2], max)
+                for i in range(start, end + 1):
+                    out.append(fs[i])
+        print opts.out_delim.join(out)

@@ -1,0 +1,5 @@
+This is the code from my blog at http://pythonwise.blogspot.com
+
+All the code here is under BSD License, see LICENSE.txt file for more details.
+
+Miki Tebeka <miki.tebeka@gmail.com>
