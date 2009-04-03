@@ -60,6 +60,10 @@
             var leftcol = (col - 1) % NUM_COLS;
             var rightcol = (col + 1) % NUM_COLS;
 
+            /* FIXME: Find a better way (since -1 % 10 => -1) */
+            downrow = (downrow < 0) ? NUM_ROWS - 1 : downrow;
+            leftcol = (leftcol < 0) ? NUM_COLS - 1 : leftcol;
+
             return [
                 [uprow, leftcol], [uprow, col], [uprow, rightcol],
                 [row, leftcol], [row, rightcol],
@@ -90,13 +94,15 @@
             }
         }
 
-        function is_alive(cell) {
-            return board[cell[0]][cell[1]] == ALIVE;
-        }
-
 
         function on_step() {
-            var changed = [];
+            /* Copy old board since we're going to change the current */
+            var board = copy_board();
+
+            function is_alive(cell) {
+                return board[cell[0]][cell[1]] == ALIVE;
+            }
+
             for (var row = 0; row < NUM_ROWS; ++row) {
                 for (var col = 0; col < NUM_COLS; ++col) {
                     var neighbours = cell_neighbours(row, col);
@@ -104,15 +110,9 @@
                     var current_state = board[row][col];
                     var new_state = calc_new_state(current_state, num_alive);
                     if (new_state != current_state) {
-                        changed.push([row, col]);
+                        toggle(row, col);
                     }
                 }
-            }
-
-            for (var i = 0; i < changed.length; ++i) {
-                var row = changed[i][0];
-                var col = changed[i][1];
-                toggle(row, col);
             }
         }
 
@@ -194,3 +194,4 @@
         $(document).ready(on_ready);
     </script>
 </html>
+
