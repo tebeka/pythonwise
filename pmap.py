@@ -29,7 +29,9 @@ def spawn(func, data):
 def wait(child):
     pid, fo = child
     waitpid(pid, P_WAIT)
-    return load(fo)
+    value = load(fo)
+    fo.close()
+    return value
 
 def pmap(func, items):
     '''
