@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 '''Parallel map (Unix only)'''
+
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+
 # The big advantage of this implemetation is that "fork" is very fast on
 # copying data, so if you pass big arrays as arguments and return small values
 # this is a win
+
+# FIXME 
+# * For too many items, we get "Too many open files"
+# * Handle child exceptions
 
 from os import fork, pipe, fdopen, waitpid, P_WAIT
 from marshal import dump, load
@@ -11,9 +18,10 @@ from itertools import takewhile, count
 def spawn(func, data):
     read_fo, write_fo = map(fdopen, pipe(), ("rb", "wb"))
     pid = fork()
-    if pid:
+    if pid: # Parent
         return pid, read_fo
 
+    # Child
     dump(func(data), write_fo)
     write_fo.close()
     raise SystemExit
@@ -23,7 +31,6 @@ def wait(child):
     waitpid(pid, P_WAIT)
     return load(fo)
 
-# FIXME: For too many items, we get "Too many open files"
 def pmap(func, items):
     '''
     >>> pmap(lambda x: x * 2, range(5))
