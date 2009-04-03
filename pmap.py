@@ -3,7 +3,7 @@
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
 
-# The big advantage of this implemetation is that "fork" is very fast on
+# The big advantage of this implementation is that "fork" is very fast on
 # copying data, so if you pass big arrays as arguments and return small values
 # this is a win
 
