@@ -35,14 +35,17 @@ class SVNPoller:
         if not IRCClient.instance:
             return
 
-        last_revision = self.get_last_revision()
-        if (not last_revision) or (last == self.last_revision):
-            return
+        try:
+            last_revision = self.get_last_revision()
+            if (not last_revision) or (last_revision == self.last_revision):
+                return
 
-        for rev in range(self.last_revision + 1, last_revision + 1):
-            author, comment = self.revision_info(rev)
-            IRCClient.instance.svn(rev, author, comment)
-        self.last_revision = last_revision
+            for rev in range(self.last_revision + 1, last_revision + 1):
+                author, comment = self.revision_info(rev)
+                IRCClient.instance.svn(rev, author, comment)
+            self.last_revision = last_revision
+        except Exception, e:
+            print "ERROR: %s" % e
 
     def svn(self, *cmd):
         pipe = Popen(self.pre +  list(cmd) + [self.root], stdout=PIPE)
