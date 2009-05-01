@@ -73,11 +73,9 @@ if __name__ == "__main__":
 
     factory = ReconnectingClientFactory()
     factory.protocol = IRCClient
-    #reactor.connectTCP("irc.mycompany.com", 6667, factory)
-    reactor.connectTCP("localhost", 6667, factory)
+    reactor.connectTCP("irc.mycompany.com", 6667, factory)
 
-    #poller = SVNPoller("http://svn.mycompany.com", "bugs", "carrot")
-    poller = SVNPoller("file:///tmp/s", "bugs", "carrot")
+    poller = SVNPoller("http://svn.mycompany.com", "bugs", "carrot")
     task = LoopingCall(poller.check)
     task.start(1)
 
