@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title></title>
+        <style>
+            h1.title {
+                text-align: center;
+            }
+            .header {
+                background: blue;
+                color: white;
+                font-size: 1.3em;
+                font-weight: bold;
+                font-variant: small-caps;
+            }
+            div.left {
+                float: left;
+                width: 50%;
+                height: 400px;
+                overflow: auto;
+            }
+            div.right {
+                float: right;
+                width: 50%;
+                height: 400px;
+                overflow: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <h1 class="title">Weather Meshup</h1>
+
+        <div>
+            <div class="left">
+                <div class="header">Beverly Hills</div>
+                <div id="bh">Loading ...</div>
+            </div>
+
+            <div class="right">
+                <div class="header">New York</div>
+                <div id="ny">Loading ...</div> 
+            </div>
+        </div>
+        <div>
+            <div class="left">
+                <div class="header">Chicago</div>
+                <div id="ch">Loading ...</div>
+            </div>
+
+            <div class="right">
+                <div class="header">Washington</div>
+                <div id="wa">Loading ...</div> 
+            </div>
+        </div>
+    </body>
+    <script src="jquery.js"></script>
+    <script>
+        function weather_url(zipcode) {
+            return 'http://www.wund.com/cgi-bin/findweather/getForecast' +
+                   '?query=' + zipcode;
+        }
+
+        function load_foreign(id, url, selector) {
+            $('#' + id).load('redirect.cgi ' + selector, {url: url});
+        }
+
+        function load_weather(id, zipcode) {
+            var url = weather_url(zipcode);
+            load_foreign(id, url, 'div#conditions');
+        }
+
+
+        function on_ready()
+        {
+            load_weather('bh', '90210');
+            load_weather('ny', '10001');
+            load_weather('ch', '60290');
+            load_weather('wa', '20001');
+        }
+
+        $(document).ready(on_ready);
+    </script>
+</html>

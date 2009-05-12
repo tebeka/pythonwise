@@ -1,0 +1,34 @@
+===========
+Hello World
+===========
+:Author: Miki Tebeka <miki.tebeka@gmail.com>
+:Date: $Date: 2007-06-05 21:02:04 -0700 (Tue, 05 Jun 2007) $
+
+.. contents::
+
+Chapter 1
+=========
+In the beginning ...
+
+Sub Chapter 1
+-------------
+There was LaTex_ [#]_
+
+Chapter 2
+=========
+And then there was reST_
+
+::
+  
+   That can have preformatted
+   text
+
+
+----
+
+.. _LaTex: http://tug.org
+.. _reST: http://docutils.sf.net/rst.html
+
+.. [#] Which is still very good
+
+.. comment: vim: ft=rst spell

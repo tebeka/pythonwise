@@ -1,0 +1,1 @@
+@reboot /usr/bin/python /path/to/nfs-keep.py
