@@ -1,71 +1,88 @@
 #!/usr/bin/env python
-'''Unpack compressed files'''
+'''Unpack/show compressed files
+
+Create a symbolic link called "zview" to this file or specify -l to view
+'''
 
 __author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
 
 from os import system
 from os.path import splitext, isfile
-from sys import stderr, version_info
-if float("%s.%s" % version_info[:2]) < 2.3:
-    raise SystemExit("need at least Python 2.3 to run")
+from operator import itemgetter
 
-from optparse import OptionParser
-parser = OptionParser(usage="usage: %prog [options] FILE[s]")
-parser.add_option("-f", "--find", help="just find program, don't unpack",
-    dest="find", action="store_true", default=0)
+def _stdout(cmd, filename):
+    return "%s '%s' > '%s'" % (cmd, filename, splitext(filename)[0])
 
-opts, args = parser.parse_args()
-if not args:
-    parser.error("wrong number of arguments") # Will exit
+def bz(filename):
+    return _stdout("bzip2 -d -c", filename)
 
-def _stdout(cmd, file):
-    return "%s \"%s\" > %s" % (cmd, file, splitext(file)[0])
+def gz(filename):
+    return _stdout("gunzip -c", filename)
 
-def bz(file):
-    return _stdout("bzip2 -d -c", file)
+class Archive:
+    extensions = {} # Extension -> instance
 
-def gz(file):
-    return _stdout("gunzip -c", file)
+    def __init__(self, unpack, list, extensions):
+        self.unpack = unpack
+        self.list = list
+        for ext in extensions:
+            Archive.extensions[ext] = self
 
-EXTS = []
-def register(func, *extensions):
-    for ext in extensions:
-        EXTS.append((ext.lower(), func))
+Archive("tar -xzvf", "tar -tzf", [".tar.gz", ".tgz", ".tar.z"]),
+Archive("tar -xjvf", "tar -tjf", [".tar.bz", ".tar.bz2"]),
+Archive(bz, "", [".bz", ".bz2"]),
+Archive("tar -xvf", "tar -tf", [".tar"]),
+Archive("unzip", "unzip -l", [".zip", "jar", "egg"]),
+Archive("unarj e", "unarj l", [".arj"]),
+Archive(gz, "", [".gz", ".Z"]),
+Archive("unrar x", "unrar lb", [".rar"]),
+Archive("7za x", "7za l", [".7z"])
 
-register("tar -xzvf", ".tar.gz", ".tgz", ".tar.Z")
-register("tar -xjvf", ".tar.bz", ".tar.bz2", ".tbz")
-register(bz, ".bz", ".bz2")
-register("tar -xvf", ".tar")
-register("unzip", ".zip", "jar", "egg")
-register("unarj", ".arj")
-register(gz, ".gz", ".Z")
-register("unrar x", ".rar")
-register("7za x", ".7z")
+def find_archive(filename):
+    # Find *longest* matching extension
+    for ext in sorted(Archive.extensions, reverse=1, key=len):
+        if filename.lower().endswith(ext):
+            return Archive.extensions[ext]
 
-# We sort by length of extension, longest first
-EXTS.sort(lambda e1, e2: cmp(len(e2[0]), len(e1[0])))
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
 
-err = 0
-for file in args:
-    if (not opts.find) and (not isfile(file)):
-        print >> stderr, "error: can't find", file
-        err = 1
-        continue
-    fl = file.lower()
-    for ext, cmd in EXTS:
-        if fl.endswith(ext):
-            if callable(cmd):
-                cmd = cmd(file)
-            else:
-                cmd = "%s \"%s\"" % (cmd, file)
-            if opts.find:
-                print "%s: %s" % (file, cmd)
-            else:
-                if system(cmd) != 0:
-                    err = 1
-            break
+    from optparse import OptionParser
+    parser = OptionParser(usage="usage: %prog [options] FILE")
+    parser.add_option("-s", "--show", help="just show command, don't run",
+        dest="show", action="store_true", default=0)
+    parser.add_option("-l", "--list", help="list files in archive", 
+        dest="list", action="store_true", default=0)
+
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) != 1:
+        parser.error("wrong number of arguments") # Will exit
+
+    infile = args[0]
+    if (not opts.show) and (not isfile(infile)):
+        raise SystemExit("error: can't find %s" % infile)
+
+    archive = find_archive(infile)
+    if not archive:
+        raise SystemExit("error: don't know how to handle %s" % infile)
+    list = opts.list or ("zview" in __file__)
+    command = archive.list if list else archive.unpack
+
+    infile =  infile.replace("'", "\\'")
+
+    if callable(command):
+        command = command(infile)
     else:
-        print "error: can't find a program to extract", file
-        err = 1
+        command = "%s '%s'" % (command, infile)
 
-raise SystemExit(err)
+    if opts.show:
+        print command
+        raise SystemExit
+
+    raise SystemExit(system(command))
+
+if __name__ == "__main__":
+    main()
