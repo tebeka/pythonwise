@@ -16,7 +16,11 @@ EOF
 }
 
 search() {
-    omega=/usr/lib/cgi-bin/omega/omega
+    if [ "$(uname)" == "Darwin" ]; then
+        omega=/opt/lib/xapian-omega/bin/omega
+    else
+        omega=/usr/lib/cgi-bin/omega/omega
+    fi
     config=$PWD/.omega/omega.conf
     results=.omega/results.html
     OMEGA_CONFIG_FILE=$config $omega "P=$1" "HITSPERPAGE=1000" > $results
