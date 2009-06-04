@@ -1,0 +1,42 @@
+#!/usr/bin/env python
+'''Place stuff in clipboard - multi platform'''
+
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+
+from os import popen
+from sys import platform, stdin
+
+COMMDANDS = { # platform -> command
+    "darwin" : "pbcopy",
+    "linux2" : "xsel -i",
+    "cygwin" : "/bin/putclip",
+}
+
+USAGE = '''usage: putclip [PATH]
+'''
+
+def main():
+    from sys import argv
+
+    if len(argv) not in (1, 2):
+        raise SystemExit(USAGE)
+
+    if (len(argv) == 1) or (argv[1] == "-"):
+        from sys import stdin
+        info = stdin
+    else:
+        infile = argv[1]
+        try:
+            info = open(infile)
+        except IOError, e:
+            raise SystemExit("error: can't open %s - %s" % (infile, e))
+
+    command = COMMDANDS.get(platform, None)
+    if not command:
+        error = "error: don't know how to handle clipboard on %s" % platform
+        raise SystemExit(error)
+
+    popen(command, "w").write(info.read())
+
+if __name__ == "__main__":
+    main()

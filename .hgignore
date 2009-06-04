@@ -1,0 +1,4 @@
+syntax: glob
+
+glue/lighttpd.conf
+glue/lighttpd.pid

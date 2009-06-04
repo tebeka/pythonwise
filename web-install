@@ -1,0 +1,30 @@
+#!/bin/bash
+# Do the `./configure && make && sudo make install` dance, given a download URL
+
+if [ $# -ne 1 ]; then
+    echo "usage: `basename $0` URL"
+    exit 1
+fi
+
+set -e  # Fail on errors
+
+url=$1
+
+wget --no-check-certificate $url
+archive=`basename $url`
+
+if echo $archive | grep -q .tar.bz2; then
+    tar -xjf $archive
+else
+    tar -xzf $archive
+fi
+
+cd ${archive/.tar*}
+
+if [ -f setup.py ]; then
+    sudo python setup.py install
+else
+    ./configure && make && sudo make install
+fi
+
+cd ..
