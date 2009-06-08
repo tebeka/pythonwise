@@ -1,0 +1,64 @@
+#!/bin/bash
+
+# Minimal search using Xpians Omega (http://xapian.org/docs/omega/overview.html)
+# Use "omsearch -i" to index current directoy, then use "omsearch QUERY" to
+# search
+
+
+index() {
+    mkdir .omega
+    cat >> .omega/omega.conf << EOF
+    database_dir $PWD/.omega
+    template_dir /var/lib/xapian-omega/templates
+    log_dir /tmp
+EOF
+    omindex --db .omega/default .
+}
+
+search() {
+    if [ "$(uname)" == "Darwin" ]; then
+        omega=/opt/lib/xapian-omega/bin/omega
+    else
+        omega=/usr/lib/cgi-bin/omega/omega
+    fi
+    config=$PWD/.omega/omega.conf
+    results=.omega/results.html
+    OMEGA_CONFIG_FILE=$config $omega "P=$1" "HITSPERPAGE=1000" > $results
+    egrep -o '<B><A HREF=".*"' $results | cut -d\" -f2 | \
+        xargs -i printf ".%s\n" {}
+
+}
+
+USAGE="usage: $(basename $0) [-i | QUERY]"
+
+index=no
+while getopts "ih" opt
+do
+    case $opt in
+        h | H ) echo $USAGE; exit;;
+        i ) index=yes;;
+        * ) echo "error: unknown option" >&2; exit 1;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+
+if [ "$index" == "yes" ]; then
+    if [ $# -gt 0 ]; then
+        echo "error: -i don't take any parameters"
+        exit 1
+    fi
+    index
+    exit
+fi
+
+if [ $# -ne 1 ]; then
+    echo $USAGE
+    exit 1
+fi
+
+if [ ! -d .omega ]; then
+    echo "error: can't find .omega, run with -i to index first"
+    exit 1
+fi
+search $1
