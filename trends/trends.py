@@ -1,5 +1,9 @@
 #!/usr/bin/env python
-# A twitter trends/google news mesh
+'''A twitter trends/google news mesh
+
+loader_thread get news trends every 1min and set _TRENDS_HTML
+The web server serves _TRENDS_HTML with is refresed via JavaScript every 30sec
+'''
 
 from urllib import urlopen, urlencode
 import feedparser
@@ -15,22 +19,21 @@ def trend_news(trend):
         "output" : "rss"
     }
     url = "http://news.google.com/news?" + urlencode(query)
-    feed = feedparser.parse(url)
-    return map(lambda e: {"url" : e.link, "title" : e.title}, feed.entries)
+    return feedparser.parse(url).entries
 
 def current_trends():
     url = "http://search.twitter.com/trends.json"
     return json.load(urlopen(url))["trends"]
 
 def news_html(news):
-    html = '<li><a href="%(url)s">%(title)s</a></li>'
-    chunks = map(lambda s: html % s, news)
+    html = '<li><a href="%(link)s">%(title)s</a></li>'
+    chunks = map(lambda e: html % e, news)
     return "\n".join(["<ul>"] + chunks + ["</ul>"])
 
 def trend_html(trend):
-   thtml = '<a class="trend" href="%(url)s">%(name)s' % trend
+   thtml = '<a href="%(url)s">%(name)s' % trend
    nhtml = news_html(trend_news(trend["name"]))
-   return '<tr><td class="trend">%s</td><td>%s</td><tr>' % (thtml, nhtml)
+   return '<tr><td>%s</td><td>%s</td><tr>' % (thtml, nhtml)
 
 def table_html(trends):
     return ("<table>" + 
