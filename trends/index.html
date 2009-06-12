@@ -1,25 +1,52 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <!-- FIXME: Find a better title :) -->
         <title>Trends</title>
         <link rel="stylesheet" href="trends.css" />
+        <style>
+            body {
+                font-family: Serif, Helvetica;
+            }
+
+            table {
+                width: 100%;
+                border: 2px solid gray;
+            }
+
+            td {
+                vertical-align: top;
+                border-bottom: 1px solid black;
+            }
+
+            h1 {
+                text-align: center;
+                font-variant: small-caps;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            a:hover {
+                background: silver;
+            }
+        </style>
     </head>
     <body>
         <h1>Trends</h1>
-        <table>
-            <tr>
-                <th id="trends_header">Trends</th>
-                <th>Related Stories</th>
-            </tr>
-            <tr>
-                <td><ul id="trends"></ul></td>
-                <td id="news"></td>
-            </tr>
-        </table>
-        <hr />
-        Last updated: <span id="updated">Loading ...</span>
+        <div id="trends">
+            Loading ...
+        </div>
     </body>
     <script src="jquery.js"></script>
-    <script src="trends.js"></script>
+    <script>
+        function load() {
+            $('#trends').load('/trends');
+        }
+        $(document).ready(function() {
+            load();
+            setInterval(load, 30 * 1000);
+        });
+    </script>
 </html>

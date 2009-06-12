@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 # A twitter trends/google news mesh
 
-import json
 from urllib import urlopen, urlencode
 import feedparser
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from os.path import dirname, join, splitext
+import json
+from threading import Thread
+from time import sleep
 
 def trend_news(trend):
     query = {
@@ -26,11 +28,38 @@ def news_html(news):
     return "\n".join(["<ul>"] + chunks + ["</ul>"])
 
 def trend_html(trend):
-    return {
-        "trend" : '<li><a class="trend" href="%(url)s">%(name)s</li>' % trend,
-        "url" : trend["url"],
-        "news" : news_html(trend_news(trend["name"])),
-    }
+   thtml = '<a class="trend" href="%(url)s">%(name)s' % trend
+   nhtml = news_html(trend_news(trend["name"]))
+   return '<tr><td class="trend">%s</td><td>%s</td><tr>' % (thtml, nhtml)
+
+def table_html(trends):
+    return ("<table>" + 
+            "<tr><th>Trend</th><th>Related News</th></tr>" +
+            "".join(map(trend_html, trends)) +
+            "</table>"
+           )
+
+_TRENDS_HTML = ""
+def loader_thread():
+    global _TRENDS_HTML
+
+    while 1:
+        html = table_html(current_trends())
+        html = html.encode("ascii", "ignore") # Pure ACII
+
+        _TRENDS_HTML = html
+        sleep(60)
+
+def run_loader_thread():
+    t = Thread(target=loader_thread)
+    t.daemon = 1
+    t.start()
+
+def trends_html():
+    while not _TRENDS_HTML:
+        sleep(0.1)
+
+    return _TRENDS_HTML
 
 def index_html():
     return open(join(dirname(__file__), "index.html")).read()
@@ -39,16 +68,15 @@ class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path == "/":
             self.wfile.write(index_html())
-        elif self.path.startswith("/get"):
-#             html = map(trend_html, current_trends())
-#             json.dump(html, self.wfile)
-            self.wfile.write(open("t.json").read())
+        elif self.path.startswith("/trends"):
+            self.wfile.write(trends_html())
         elif splitext(self.path)[1] in (".js", ".css"):
             self.wfile.write(open(".%s" % self.path).read())
         else:
             self.send_error(404, "Not Found")
 
 if __name__ == "__main__":
+    run_loader_thread()
     server = HTTPServer(("", 8888), RequestHandler)
     server.serve_forever()
 
