@@ -13,9 +13,12 @@ import json
 from threading import Thread
 from time import sleep
 
+def ascii_clean(text):
+    return text.encode("ascii", "ignore") # Pure ACII
+
 def trend_news(trend):
     query = {
-        "q" : trend,
+        "q" : ascii_clean(trend),
         "output" : "rss"
     }
     url = "http://news.google.com/news?" + urlencode(query)
@@ -47,10 +50,7 @@ def loader_thread():
     global _TRENDS_HTML
 
     while 1:
-        html = table_html(current_trends())
-        html = html.encode("ascii", "ignore") # Pure ACII
-
-        _TRENDS_HTML = html
+        _TRENDS_HTML = ascii_clean(table_html(current_trends()))
         sleep(60)
 
 def run_loader_thread():
