@@ -69,11 +69,11 @@ function strftime(format, date) {
         H: zeropad(date.getHours()),
         I: zeropad(twelve(date.getHours())),
         /* FIXME: j: */
-        m: zeropad(date.getMonth()),
+        m: zeropad(date.getMonth() + 1),
         M: zeropad(date.getMinutes()),
         p: (date.getHours() >= 12) ? 'PM' : 'AM',
         S: zeropad(date.getSeconds()),
-        w: zeropad(date.getDay()),
+        w: zeropad(date.getDay() + 1),
         /* FIXME: W: */
         x: date.toLocaleDateString(),
         X: date.toLocaleTimeString(),
