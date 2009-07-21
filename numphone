@@ -1,0 +1,12 @@
+#!/bin/bash
+# Convert phone numbers to numeric (1-800-T-MOBILE -> 1-800-8-662453)
+
+if [ $# -ne 1 ]; then
+    echo "usage: $(basename $0) PHONE-NUMBER"
+    exit 1
+fi
+
+echo $1 | \
+    tr '[:lower:]' '[:upper:]' | \
+    tr ABCDEFGHIJKLMNOPQRSTUVWXYZ 22233344455566677778889999
+

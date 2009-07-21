@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+'''Path filter, to be used in pipes to filter out paths.
+
+* Unix test commands (such as -f can be specified as well)
+* {} replaces file name
+
+Examples:
+    # List only files in current directory
+    ls -a | pfilter -f
+
+    # Find files not versioned in svn 
+    # (why, oh why, does svn *always* return 0?)
+    find . | pfilter 'test -n "`svn info {} 2>&1 | grep Not`"'
+'''
+
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+
+from os import system
+
+def pfilter(path, command):
+    '''Filter path according to command'''
+
+    if "{}" in command:
+        command = command.replace("{}", path)
+    else:
+        command = "%s %s" % (command, path)
+
+    if command.startswith("-"):
+        command = "test %s" %  command
+
+    # FIXME: win32 support
+    command += " 2>&1 > /dev/null"
+
+    return system(command) == 0
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from sys import stdin
+    from itertools import imap, ifilter
+    from string import strip
+    from functools import partial
+
+    if len(argv) != 2:
+        from os.path import basename
+        from sys import stderr
+        print >> stderr, "usage: %s COMMAND" % basename(argv[0])
+        print >> stderr
+        print >> stderr, __doc__
+        raise SystemExit(1)
+
+    command = argv[1]
+    # Don't you love functional programming?
+    for path in ifilter(partial(pfilter, command=command), imap(strip, stdin)):
+        print path
+
+if __name__ == "__main__":
+    main()

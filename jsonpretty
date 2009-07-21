@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+'''JSON prettifier'''
+
+def shift(array):
+    try:
+        return array.pop(0)
+    except IndexError:
+        return None
+
+def fopen(name, mode, default):
+    if name in (None, "-"):
+        return default
+    return open(name, mode)
+
+def main(argv=None):
+    import sys
+    from optparse import OptionParser
+
+    argv = argv or sys.argv
+
+    indent = 4
+    parser = OptionParser("%prog [INFILE [OUTFILE]]")
+    parser.add_option("-i", "--indent", help="indent size (%s)" % indent,
+                      dest="indent", default=indent, type="int")
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) not in (0, 1, 2):
+        parser.error("wrong number of arguments") # Will exit
+
+    try:
+        info = fopen(shift(args), "r", sys.stdin)
+        outfo = fopen(shift(args), "w", sys.stdout)
+    except IOError, e:
+        raise SystemExit("error: %s" % e)
+
+    import json
+    json.dump(json.load(info), outfo, indent=opts.indent)
+        
+if __name__ == "__main__":
+    main()

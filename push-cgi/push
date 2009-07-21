@@ -1,0 +1,38 @@
+#!/usr/bin/env python
+
+from urllib import urlopen, urlencode
+
+CGI_URL = "http://localhost:8080/load.cgi"
+def push_data(key, data):
+    query = urlencode([("data", data), ("key", key)])
+    try:
+        urlopen(CGI_URL, query).read()
+    except IOError, e:
+        pass # FIXME: Handle error
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+    from os.path import isfile, basename
+
+    parser = OptionParser("usage: %prog FILENAME")
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) != 1:
+        parser.error("wrong number of arguments") # Will exit
+
+    filename = args[0]
+    if not isfile(filename):
+        raise SystemExit("error: can't find %s" % filename)
+
+    key = basename(filename)
+    data = open(filename, "rb").read()
+
+    push_data(key, data)
+
+
+if __name__ == "__main__":
+    main()
