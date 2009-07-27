@@ -1,4 +1,4 @@
-Copyright (c) 2008, Miki Tebeka <miki.tebeka@gmail.com>
+Copyright (c) 2008-2009 Miki Tebeka <miki.tebeka@gmail.com>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
