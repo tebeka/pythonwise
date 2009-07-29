@@ -3,6 +3,8 @@
 
 func OpenModule(name)
 python << EOF
+import os, sys
+sys.path.append(os.getcwd())
 import vim
 name = vim.eval("a:name")
 try:
