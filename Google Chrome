@@ -1,4 +1,3 @@
 #!/bin/bash
 
-
-"/Applications/Google Chrome.app/Contents/MacOS/_chrome" --enable-plugins
+"/Applications/Google Chrome.app/Contents/MacOS/_chrome" --enable-plugins $*
