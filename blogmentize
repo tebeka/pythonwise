@@ -9,7 +9,7 @@ if [ $# -lt 1 ] || [ $# -gt 2 ]; then
 fi
 
 filename=$1
-if [ ! -f $filename ]; then
+if [ ! -f "$filename" ]; then
     echo "error: can't find $filename"
     exit 1
 fi
@@ -17,8 +17,8 @@ fi
 type=$2
 if [ -z "$type" ]; then
     # "#!/usr/bin/env python" -> "python"
-    type=$(head -1 $filename | xargs -i basename {} | 
+    type=$(head -1 "$filename" | xargs -i basename {} | 
            sed -e 's/env //' -e 's/[<>]//g')
 fi
 
-pygmentize -l $type -f html $filename
+pygmentize -l $type -f html "$filename"
