@@ -9,6 +9,11 @@ import vim
 name = vim.eval("a:name")
 try:
     module = __import__(name)
+    if ("." in name):
+        names = name.split(".")[1:]
+        while names:
+            name = names.pop(0)
+            module = getattr(module, name)
     filename = getattr(module, "__file__", None)
     if filename:
         import re
