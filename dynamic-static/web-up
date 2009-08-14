@@ -1,0 +1,37 @@
+#!/bin/bash
+# Run web server
+
+# Stop on first error
+set -e
+
+INC=lighttpd.inc
+PORT=8080
+PYTHON=$(python -c 'import sys; print sys.executable')
+USAGE="usage: `basename $0` [-p PORT]"
+
+while getopts "u:p:nh" opt
+do
+    case $opt in
+        p ) PORT=$OPTARG;;
+        h ) echo $USAGE; exit;;
+        * ) echo "error: unrecognized option -$opt"; exit 1;;
+    esac
+done
+
+shift $(($OPTIND - 1))
+if [ $# -ne 0 ]; then
+    echo "error: wrong number of arguments"
+    echo $USAGE
+    exit 1
+fi
+
+# Don't fail on this one
+./web-down > /dev/null 2>&1 || true
+
+cat << EOF > $INC
+var.root = "$PWD"
+server.port = $PORT
+cgi.assign = ( ".cgi" => "$PYTHON" )
+EOF
+
+lighttpd -f lighttpd.conf
