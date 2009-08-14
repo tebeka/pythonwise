@@ -1,0 +1,10 @@
+#!/bin/bash
+# Kill web services
+
+if [ -f lighttpd.pid ]; then
+    pid=$(cat lighttpd.pid)
+    echo "Killing $pid"
+    kill $pid
+else
+    echo "lighttpd not running"
+fi
