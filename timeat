@@ -1,0 +1,53 @@
+#!/usr/bin/env python
+# Small mash between Google maps API and earthtools API to get the current time
+# at a given location
+
+from urllib import urlopen, urlencode
+import json
+from xml.etree.cElementTree import iterparse
+
+def timeat(location):
+    query = urlencode([("q", location)])
+    url = "http://maps.google.com/maps/geo?%s" % query
+    try:
+        # Sadly, sometimes google sends request that can't be encoded in utf-8
+        location = json.load(urlopen(url))
+    except UnicodeDecodeError:
+        return
+
+    if location["Status"]["code"] != 200:
+        return
+
+    for placemark in location["Placemark"]:
+        lat, lng, h = placemark["Point"]["coordinates"]
+        place = placemark["address"]
+        url = "http://www.earthtools.org/timezone/%s/%s" % (lat, lng)
+        for event, element in iterparse(urlopen(url)):
+            if element.tag == "localtime":
+                yield place, element.text
+                break
+
+def main(argv=None):
+    import sys
+    from optparse import OptionParser
+
+    argv = argv or sys.argv
+
+    parser = OptionParser("%prog LOCATION ...")
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) < 1:
+        parser.error("wrong number of arguments") # Will exit
+
+    location = " ".join(args)
+    try:
+        matches = list(timeat(location))
+        if not matches:
+            raise SystemExit("error: can't find time for `%s`" % location)
+
+        for addr, time in matches:
+            print "%s: %s" % (addr, time)
+    except IOError, e:
+        raise SystemExit("error: %s" % e)
+
+if __name__ == "__main__":
+    main()
