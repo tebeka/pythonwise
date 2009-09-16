@@ -42,14 +42,14 @@ def main(argv=None):
     parser = OptionParser("usage: %prog [options] [REGEX]")
     parser.add_option("-k", "--kill", help="kill processes",
             dest="kill", action="store_true", default=0)
-    parser.add_option("-i", "--interactive", 
+    parser.add_option("-i", "--interactive",
         help="interactive killing (ask before each one)",
         dest="interactive", action="store_true", default=0)
     parser.add_option("-a", "--annotate", help="annotate matching lines",
         dest="annotate", action="store_true", default=0)
     parser.add_option("-s", help="signal to send", default="SIGTERM",
             action="store", dest="signal")
-    parser.add_option("-9", help="send SIGKILL", dest="signal", 
+    parser.add_option("-9", help="send SIGKILL", dest="signal",
             action="store_const", const="SIGKILL")
     parser.add_option("-g", "--gvim", help="kill also gvim sessions",
             action="store_true", default=0, dest="gvim")
