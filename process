@@ -1,0 +1,132 @@
+#!/usr/bin/env python
+'''Find processes by regexp'''
+
+# Miki Tebeka <miki.tebeka@gmail.com>
+
+import re
+from os import popen, getpid, kill
+import signal
+from sys import platform
+
+def ask_user():
+    answer = ""
+    while not answer:
+        answer = raw_input("kill? [y/n]").strip()
+        if not answer:
+            continue
+        if answer.lower() in ("y", "yes"):
+            return 1
+        elif answer.lower() in ("n", "no"):
+            return 0
+        else:
+            print "Please answer yes or no"
+
+def find_signum(signal_name):
+    if signal_name[:3] == "SIG":
+        signum = getattr(signal, signal_name, None)
+    else:
+        try:
+            signum = int(signal_name)
+        except ValueError:
+            signum = None
+
+    return signum
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+
+    parser = OptionParser("usage: %prog [options] [REGEX]")
+    parser.add_option("-k", "--kill", help="kill processes",
+            dest="kill", action="store_true", default=0)
+    parser.add_option("-i", "--interactive", 
+        help="interactive killing (ask before each one)",
+        dest="interactive", action="store_true", default=0)
+    parser.add_option("-a", "--annotate", help="annotate matching lines",
+        dest="annotate", action="store_true", default=0)
+    parser.add_option("-s", help="signal to send", default="SIGTERM",
+            action="store", dest="signal")
+    parser.add_option("-9", help="send SIGKILL", dest="signal", 
+            action="store_const", const="SIGKILL")
+    parser.add_option("-g", "--gvim", help="kill also gvim sessions",
+            action="store_true", default=0, dest="gvim")
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) not in (0, 1):
+        parser.error("wrong number of arguments") # Will exit
+
+    regexp = args[0] if args else "."
+
+    try:
+        is_interesting = re.compile(regexp).search
+    except re.error:
+        raise SystemExit("error: bad regular expression - %s" % args[0])
+
+    signal = find_signum(opts.signal)
+    if signal is None:
+        raise SystemExit("error: bad signal - %s" % opts.signal)
+
+    found = 0
+    first = 1
+    if platform == "darwin":
+        cmd = "ps ax"
+        index = 0
+    else:
+        cmd = "ps -eff"
+        index = 1
+
+    for line in popen(cmd):
+        line = line.rstrip()
+        # Print header line
+        if first:
+            first = 0
+            print line
+            continue
+
+        if (not opts.annotate) and (not is_interesting(line)):
+            continue
+
+        fields = line.split()
+        pid = int(fields[index])
+        if pid == getpid():
+            continue
+
+        # Color lines
+        if is_interesting(line):
+            found = 1
+            if opts.annotate:
+                print "\033[32m%s\033[0m" % line
+            else:
+                print line
+        elif opts.annotate:
+            print line
+
+        # Kill only intersting lines
+        if not is_interesting(line):
+            continue
+        do_kill = 0
+        if opts.kill and opts.interactive:
+            do_kill = ask_user()
+        elif opts.kill and not opts.gvim:
+            do_kill = "vim" not in line.lower()
+        elif opts.kill:
+            do_kill = 1
+
+        if do_kill:
+            try:
+                kill(pid, signal)
+                print "%d killed" % pid
+            except OSError, e:
+                print "error: %s" % e
+        elif opts.kill:
+            print "not killing %s" % pid
+
+    if not found:
+        error = "error: can't find any process matching `%s'" % args[0]
+        raise SystemExit(error)
+
+if __name__ == "__main__":
+    main()
