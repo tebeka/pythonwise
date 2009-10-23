@@ -6,8 +6,13 @@ from urllib import urlopen, urlencode
 import json
 from xml.etree.cElementTree import iterparse
 
+google_key = (
+    "ABQIAAAAet8IFrmrJ_pomL8rTFXEyxSo7y1pJQguvgOA"
+    "XVoQyu7YX5GThxSGUNH1P9UT48nxNUi2Ffu0FQpkWw"
+)
+
 def timeat(location):
-    query = urlencode([("q", location)])
+    query = urlencode([("q", location), ("key", google_key)])
     url = "http://maps.google.com/maps/geo?%s" % query
     try:
         # Sadly, sometimes google sends request that can't be encoded in utf-8
@@ -19,7 +24,7 @@ def timeat(location):
         return
 
     for placemark in location["Placemark"]:
-        lat, lng, h = placemark["Point"]["coordinates"]
+        lng, lat, h = placemark["Point"]["coordinates"]
         place = placemark["address"]
         url = "http://www.earthtools.org/timezone/%s/%s" % (lat, lng)
         for event, element in iterparse(urlopen(url)):
