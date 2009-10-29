@@ -5,3 +5,4 @@ glue/lighttpd.pid
 dynamic-static/charts/*.png
 dynamic-static/lighttpd.inc
 dynamic-static/lighttpd.pid
+macapp/HumbleCalc.*
