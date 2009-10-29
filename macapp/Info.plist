@@ -15,7 +15,7 @@
         <key>CFBundleSignature</key>
 	<string>HMCL</string>
         <key>CFBundleExecutable</key>
-	<string>calc.py</string>
+	<string>humblecalc.py</string>
 </dict>
 </plist>
 
