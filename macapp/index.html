@@ -13,9 +13,11 @@
         </style>
     </head>
     <body>
-        <h1>HumbleCalc</h1>
-        <input id="expr" /> =
-        <input id="result" DISABLED/>
+        <div id="#body">
+            <h2><img src="humblecalc.ico">HumbleCalc</h2>
+            <input id="expr" /> =
+            <input id="result" DISABLED/>
+        </div>
     </body>
     <script src="jquery.js"></script>
     <script>
@@ -28,8 +30,14 @@
             $.get('/eval', {expr: expr}, handle_result);
         }
 
+        function on_unload() {
+            $.get('/quit');
+        }
+
         function on_ready() {
+            $(window).bind('beforeunload', on_unload);
             $('#expr').keyup(on_change);
+            $('#expr').focus();
         }
 
         $(document).ready(on_ready);
