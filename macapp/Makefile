@@ -10,6 +10,7 @@ app:
 	mkdir -p $(APP)/Contents/MacOS
 	mkdir -p $(APP)/Resources
 	cp humblecalc.py $(APP)/Contents/MacOS
+	cp humblecalc.ico $(APP)/Resources
 	cp Info.plist $(APP)/Contents
 
 clean:
