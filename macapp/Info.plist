@@ -16,6 +16,8 @@
 	<string>HMCL</string>
         <key>CFBundleExecutable</key>
 	<string>humblecalc.py</string>
+        <key>CFBundleIconFile</key>
+        <string>humblecalc.ico</string>
 </dict>
 </plist>
 
