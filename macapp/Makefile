@@ -1,3 +1,4 @@
+# Create an applicaiton bundle and pack it in a zip file
 APP = HumbleCalc.app
 ZIP = HumbleCalc.zip
 
