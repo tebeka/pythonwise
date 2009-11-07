@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# Find the carrier for a cell number using whitepages
+
+if [ $# -ne 1 ]; then
+    echo "usage: $(basename $0) NUMBER"
+    exit 1
+fi
+
+# Fake Firefox
+agent="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.1) "
+agent="$agent Gecko/20061204 Firefox/2.0.0.1"
+
+url="http://www.whitepages.com/carrier_lookup?"
+url="${url}carrier=other&number_0=${1}&name_1=&number_1=&name_2=&number_2="
+url="${url}&name_3=&number_3=&response=1"
+
+curl -A "$agent" -L -s "$url" | \
+    grep -A1 carrier_result | tail -1 | \
+    sed 's/.*(\(.*\))/\1/'
