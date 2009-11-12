@@ -41,7 +41,7 @@ HTML = '''
         </table>
         <span id="updated"></span>
         <hr />
-        By <a href="mailto:miki.tebeka@gmail.com">Miki</a>
+        By <a href="mailto:miki@mikitebeka.com">Miki</a>
     </body>
     <script src="jquery.js"></script>
     <script>

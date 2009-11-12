@@ -1,7 +1,7 @@
 #!/bin/bash
 # Open a file from command line, multi OS
 
-# Miki Tebeka <miki.tebeka@gmail.com>
+# Miki Tebeka <miki@mikitebeka.com>
 
 if [ $# -ne 1 ]; then
     echo "usage: `basename $0` PATH"

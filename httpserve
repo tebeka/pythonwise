@@ -1,7 +1,7 @@
 #!/bin/bash
 # Quickly serve files over HTTP
 
-# Miki Tebeka <miki.tebeka@gmail.com>
+# Miki Tebeka <miki@mikitebeka.com>
 
 usage="usage: `basename $0` PATH [PORT]" 
 

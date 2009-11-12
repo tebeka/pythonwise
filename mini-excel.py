@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''Mini Excel'''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 import wx
 from wx.grid import (

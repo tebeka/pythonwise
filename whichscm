@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''Find under which SCM directory is'''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 from os import sep
 from os.path import join, isdir, abspath

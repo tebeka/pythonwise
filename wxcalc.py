@@ -3,7 +3,7 @@
 # So that 8/3 will be 2.6666 and not 2
 from __future__ import division
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 __version__ = "0.0.2"
 
 # Calculator GUI:
