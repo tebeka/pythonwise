@@ -17,4 +17,4 @@ url="${url}&name_3=&number_3=&response=1"
 
 curl -A "$agent" -L -s "$url" | \
     grep -A1 carrier_result | tail -1 | \
-    sed 's/.*(\(.*\))/\1/'
+    sed -e 's/.*(\(.*\))/\1/' -e 's/^ \+//'
