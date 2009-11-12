@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''A CGI "trampoline" to enable cross site AJAX (when JSONP is not possible)'''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 from os import environ
 from sys import argv

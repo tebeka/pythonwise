@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''Find python module version'''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 def valueof(v):
     if callable(v):

@@ -4,7 +4,7 @@
 Create a symbolic link called "zview" to this file or specify -l to view
 '''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 from os import system
 from os.path import splitext, isfile

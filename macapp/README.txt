@@ -2,7 +2,7 @@
 Quick and Easy OSX Applications
 ===============================
 
-:Author: Miki Tebeka <miki.tebeka@gmail.com>
+:Author: Miki Tebeka <miki@mikitebeka.com>
 
 This is a demo on how to quickly create OS X (Mac) application using the
 bundled Python.

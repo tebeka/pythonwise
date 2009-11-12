@@ -2,7 +2,7 @@
 # Extract audio from video files
 # Uses ffmpeg and lame
 
-# Miki Tebeka <miki.tebeka@gmail.com>
+# Miki Tebeka <miki@mikitebeka.com>
 
 if [ $# -ne 2 ]; then
     echo "usage: `basename $0` INPUT_VIDEO OUTPUT_MP3"

@@ -11,7 +11,7 @@ Algorithm from http://mini.net/tcl/591
 Modified by Chris Beaven to do the FIXME
 '''
 
-__author__ = 'Miki Tebeka <miki.tebeka@gmail.com>'
+__author__ = 'Miki Tebeka <miki@mikitebeka.com>'
 
 
 import math

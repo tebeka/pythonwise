@@ -1,7 +1,7 @@
 #!/bin/bash
 # Guess which make utility to use
 
-# Miki Tebeka <miki.tebeka@gmail.com>
+# Miki Tebeka <miki@mikitebeka.com>
 
 makecmd=""
 if [ -f SConstruct ]; then
