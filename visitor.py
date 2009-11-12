@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 class Visitor:
     '''General visitor'''

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''Quick and dirty object "repr"'''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 # FIXME: Find how to make doctest play with "regular" class definition
 

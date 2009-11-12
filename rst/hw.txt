@@ -1,7 +1,7 @@
 ===========
 Hello World
 ===========
-:Author: Miki Tebeka <miki.tebeka@gmail.com>
+:Author: Miki Tebeka <miki@mikitebeka.com>
 :Date: $Date: 2007-06-05 21:02:04 -0700 (Tue, 05 Jun 2007) $
 
 .. contents::

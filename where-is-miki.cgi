@@ -4,7 +4,7 @@
 Get gdata from http://code.google.com/p/gdata-python-client/
 '''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 import gdata.calendar.service as cal_service
 from time import localtime, strptime, strftime, mktime, timezone

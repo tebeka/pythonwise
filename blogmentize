@@ -1,7 +1,7 @@
 #!/bin/bash
 # Generate HTML of code to blog
 
-# Miki Tebeka <miki.tebeka@gmail.com>
+# Miki Tebeka <miki@mikitebeka.com>
 
 if [ $# -lt 1 ] || [ $# -gt 2 ]; then
     echo "usage: $0 FILE [TYPE]"

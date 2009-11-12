@@ -4,7 +4,7 @@
 Copy all message to "Archive" and delete them from Inbox
 '''
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 from imaplib import IMAP4
 import logging as log

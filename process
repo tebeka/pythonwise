@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''Find processes by regexp'''
 
-# Miki Tebeka <miki.tebeka@gmail.com>
+# Miki Tebeka <miki@mikitebeka.com>
 
 import re
 from os import popen, getpid, kill

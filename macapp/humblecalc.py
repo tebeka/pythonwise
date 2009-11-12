@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # Very humble calculator, written as "Web Desktop Application"
 
-__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 from __future__ import division
 from math import *
