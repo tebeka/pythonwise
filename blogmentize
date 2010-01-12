@@ -21,4 +21,4 @@ if [ -z "$type" ]; then
            sed -e 's/env //' -e 's/[<>]//g')
 fi
 
-pygmentize -l $type -f html -O "linenos=1" "$filename"
+pygmentize -l $type -f html "$filename"
