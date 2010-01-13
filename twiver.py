@@ -60,7 +60,7 @@ HTML = '''
             });
             $('#updated').html('Updated: ' + new Date());
 
-            setTimeout(update, 10 * 1000);
+            setTimeout(update, 1000);
         }
 
         function update() {
