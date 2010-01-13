@@ -65,8 +65,7 @@ HTML = '''
 
         function update() {
             var query = $.trim($('#query').val());
-            url = '/search?q=' + query;
-            $.getJSON(url, handle_result);
+            $.getJSON('/search', {q: query}, handle_result);
         }
 
         function run() {
