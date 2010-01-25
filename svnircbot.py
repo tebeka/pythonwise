@@ -50,8 +50,8 @@ class SVNPoller:
     def svn(self, *cmd):
         pipe = Popen(self.pre +  list(cmd) + [self.root], stdout=PIPE)
         try:
-            data = pipe.stdout.read()
-        except IOError: # FIXME: Find why
+            data = pipe.communicate()[0]
+        except IOError:
             data = ""
         return xmlparse(StringIO(data))
 
