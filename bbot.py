@@ -24,6 +24,7 @@ def main():
             urlopen(tweet_url, "status=%s" % message)
 
         last_time = now if builds else last_time
+        sleep(10)
 
 if __name__ == "__main__":
     main()
