@@ -12,8 +12,7 @@ tweet_url = "http://%s:%s@twitter.com/statuses/update.xml" % (user, password)
 
 def main():
     proxy = ServerProxy(bbot_url)
-    #last_time = time()
-    last_time = 0
+    last_time = time()
 
     while 1:
         now = time()
