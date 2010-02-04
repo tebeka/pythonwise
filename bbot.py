@@ -23,7 +23,6 @@ def main():
             status = "OK" if status == "success" else "BROKEN"
             message = "[%s] build %s is %s" % (builder, build, status)
             urlopen(tweet_url, "status=%s" % message)
-            break
 
         last_time = now if builds else last_time
 
