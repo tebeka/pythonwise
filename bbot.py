@@ -3,7 +3,6 @@
 
 from time import time, sleep
 from xmlrpclib import ServerProxy
-from subprocess import call
 from urllib import urlopen
 
 user, password = "tebeka", "SECRET_PASSWORD"
