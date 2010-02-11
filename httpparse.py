@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Parse HTTP response
 
 from StringIO import StringIO
