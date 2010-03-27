@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!-- Minimal sound player in Flash (Adobe Flex) -->
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml"
+    creationComplete="appInit()">
+
+    <mx:Script>
+        <![CDATA[
+            import flash.external.*;
+
+            /* Current sound channel */
+            private var _channel:SoundChannel;
+
+            public function play(url:String):void
+            {
+                var sound:Sound = new Sound(new URLRequest(url));
+                _channel = sound.play();
+
+                /* Register for "end of play" event */
+                _channel.addEventListener(Event.SOUND_COMPLETE, on_complete);
+            }
+
+            public function stop():void
+            {
+                _channel.stop();
+            }
+
+            public function on_complete(event:Event):void
+            {
+                /* Notify JavaScript that play has completed */
+                ExternalInterface.call("on_play_complete");
+            }
+
+            public function appInit():void {
+                /* Register javascript functions */
+                ExternalInterface.addCallback("play", play);
+                ExternalInterface.addCallback("stop", stop);
+            }
+
+        ]]>
+    </mx:Script>
+
+</mx:Application>
