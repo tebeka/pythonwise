@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>JavaScript SoundPlayer Demo</title>
+        <style>
+        </style>
+    </head>
+    <body>
+        <h2>SoundPlayer Demo</h2>
+        <!-- Buttons -->
+        <button onclick="play_sound('dog');">Play Dog</button>
+        <button onclick="play_sound('cat');">Play Cat</button>
+        <button onclick="stop_sound();">Stop</button>
+
+        <!-- Our player -->
+        <div id="player_div">
+            <object width="0" height="0" id="soundplayer">
+                <param name="src" value="soundplayer.swf">
+                <param name="flashVars" value="">
+                <embed name="soundplayer" src="soundplayer.swf" width="0" height="0">
+                </embed>
+            </object>
+        </div>
+    </body>
+    <script>
+        var SOUNDS = {
+            dog : '15211/dogs+crazy+barking+loud.mp3',
+            cat : '83187/Cat+long+yowl_BLASTWAVEFX_20544.mp3'
+        };
+
+        function play_sound(animal) {
+            var url = 'http://www.soundsnap.com/audio/mp3/' + SOUNDS[animal];
+            soundplayer().play(url);
+        }
+
+        function stop_sound() {
+            soundplayer().stop();
+        }
+
+        function on_play_complete() {
+            alert('Play ended');
+        }
+
+        function soundplayer() {
+            if (navigator.appName.indexOf ("Microsoft") != -1) {
+                return window['soundplayer'];
+            }
+            else {
+                return document['soundplayer'];
+            }
+        }
+    </script>
+</html>
