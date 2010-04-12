@@ -1,0 +1,32 @@
+#!/bin/bash
+# A script to run a temporary couchdb instance
+
+if [ $# -ne 1 ]; then
+    echo "usage: $(basename $0) PORT"
+    exit 1
+fi
+
+port=$1
+
+base=$(mktemp -d)
+dbdir=$base/data
+config=$base/config.ini
+mkdir -p $dbdir
+
+cat <<EOF > $config
+[httpd]
+port = $port
+
+[couchdb]
+database_dir = $dbdir
+view_index_dir = $dbdir
+
+[log]
+file = ${base}/couch.log
+EOF
+
+trap "rm -fr $base" SIGINT SIGTERM
+
+echo "couchdb directory is $base"
+couchdb -a $config
+
