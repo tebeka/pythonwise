@@ -7,6 +7,6 @@ def source(script, update=1):
 
     env = dict((line.split("=", 1) for line in data.splitlines()))
     if update:
-        environ.upadate(env)
+        environ.update(env)
 
     return env
