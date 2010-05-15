@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Delete all databases on a couchdb server
+
+# Exit on 1'st error
+set -e
+
+if [ $# -gt 1 ]; then
+    echo "usage: $(basename $0) [DB_URL]"
+    exit 1
+fi
+
+URL=${1-http://localhost:5984}
+
+echo -n "Delete *ALL* databases on $URL? [y/n] "
+read ans
+if [ "$ans" != "y" ]; then
+    exit
+fi
+
+for db in $(curl -s $URL/_all_dbs | tr '",[]' ' \n  ');
+do
+    echo "Deleting $db"
+    curl -X DELETE $URL/$db
+done
