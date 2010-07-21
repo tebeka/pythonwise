@@ -1,4 +1,5 @@
 #!/bin/bash
+# Pyflakes pre commit hook
 
 # First commit ever, skip
 git rev-parse HEAD > /dev/null 2>&1
@@ -12,10 +13,16 @@ out=/tmp/pyflakes.out
 error=0
 for filename in $(git diff --cached --name-only HEAD | egrep '\.py$');
 do
-    echo "Checking $filename with pyflakes..."
+    echo "Checking $filename ..."
+
 
     # Some magic to check the file in staging area and not the ones on disk
     git show ":${filename}" > $tmp
+
+    if grep -q -P '\t' $tmp; then
+        echo "error: Found tabs"
+        error=1
+    fi
 
     pyflakes $tmp > $out
     ok=$?
@@ -25,6 +32,8 @@ do
         error=1
     fi
 done
+
+rm $tmp
 
 if [ $error -ne 0 ]; then
     echo
