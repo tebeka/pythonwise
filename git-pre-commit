@@ -13,8 +13,12 @@ out=/tmp/pyflakes.out
 error=0
 for filename in $(git diff --cached --name-only HEAD | egrep '\.py$');
 do
-    echo "Checking $filename ..."
+    # Check that file exists, so we ignore deletes and renames
+    if [ ! -f $filename ]; then
+        continue
+    fi
 
+    echo "Checking $filename ..."
 
     # Some magic to check the file in staging area and not the ones on disk
     git show ":${filename}" > $tmp
