@@ -7,7 +7,11 @@ if [ $? -ne 0 ]; then
     exit
 fi
 
-tmp=$(mktemp)
+if [ "$(uname -s)" == "Darwin" ]; then
+    tmp=$(mktemp -t tmp)
+else
+    tmp=$(mktemp)
+fi
 out=/tmp/pyflakes.out
 
 error=0
@@ -28,7 +32,7 @@ do
         error=1
     fi
 
-    pyflakes $tmp > $out
+    pyflakes $tmp 2>&1 > $out
     ok=$?
     sed "s/^${tmp//\//\\/}/${filename//\//\\/}/" $out
 
