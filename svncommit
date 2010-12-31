@@ -1,5 +1,5 @@
 #!/bin/bash
-# Template for "svn ci"
+# Template for "svn commit"
 # Add "export SVN_EDITOR=/path/to/this/file" to your .bashrc
 
 # Fail one first error
