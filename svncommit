@@ -1,0 +1,29 @@
+#!/bin/bash
+# Template for "svn ci"
+# Add "export SVN_EDITOR=/path/to/this/file" to your .bashrc
+
+# Fail one first error
+set -e
+
+filename=$1
+editor=${EDITOR-vim}
+
+mv $filename /tmp
+
+# The template
+cat << EOF > $filename
+Bug # 
+Reviewed-by:
+
+EOF
+
+# Add file list to template
+cat /tmp/$filename >> $filename
+mtime=$(stat -c %y $filename)
+$editor $filename
+
+# Restore old file so svn will see it didn't change
+if [ "$(stat -c %y $filename)" == "$mtime" ]; then
+    mv -f /tmp/$filename $filename
+fi
+
