@@ -21,10 +21,10 @@ def main(argv=None):
         parser.error("wrong number of arguments") # Will exit
 
     url = "http://www.google.com/ig/calculator?q=%s=?%s" % tuple(args)
-    # Convert to valid JSON: {foo: "1"} -> {"foo" : "1"}
     try:
         # We decode to UTF-8 since Google sometimes return funny stuff
         result = urlopen(url).read().decode("utf-8", "ignore")
+        # Convert to valid JSON: {foo: "1"} -> {"foo" : "1"}
         result = re.sub("([a-z]+):", '"\\1" :', result)
         result = json.loads(result)
     except (ValueError, IOError), e:
