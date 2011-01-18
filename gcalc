@@ -23,7 +23,9 @@ def main(argv=None):
     url = "http://www.google.com/ig/calculator?q=%s=?%s" % tuple(args)
     # Convert to valid JSON: {foo: "1"} -> {"foo" : "1"}
     try:
-        result = re.sub("([a-z]+):", '"\\1" :', urlopen(url).read())
+        # We decode to UTF-8 since Google sometimes return funny stuff
+        result = urlopen(url).read().decode("utf-8", "ignore")
+        result = re.sub("([a-z]+):", '"\\1" :', result)
         result = json.loads(result)
     except (ValueError, IOError), e:
         raise SystemExit("error: %s" % e)
