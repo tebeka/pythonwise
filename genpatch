@@ -1,0 +1,15 @@
+#!/bin/bash
+# Generate svn style diff for current hg feature branch
+
+branch=$(hg branch)
+if [ -z $branch ]; then
+    echo "error: not a mercurial repo" 1>&2
+    exit 1
+fi
+
+if [ "$branch" == "default" ]; then
+    echo "error: in default branch" 1>&2
+    exit 1
+fi
+
+hg diff --svn -r default > ${branch}.patch
