@@ -53,7 +53,7 @@ def excepthook(type, value, traceback):
             send_email(_EMAILS, sys.argv[0], message)
 
         if _LOGFILE:
-            with open(_LOGFILE, "at") as fo: 
+            with open(_LOGFILE, "at") as fo:
                 print >> fo, message
 
     finally:
