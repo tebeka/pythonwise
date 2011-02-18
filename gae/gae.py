@@ -1,5 +1,5 @@
-# Script for "booting" AppEngine environment, place this at ~/.ipython and then
-# from the console run "import gae; gae.setup()"
+# Script for "booting" AppEngine environment. 
+# Place this at ~/.ipython and then "import gae; gae.setup()" from ipython shell
 
 # http://tech.einaregilsson.com/2010/10/11/unit-testing-model-classes-in-google-app-engine/#more-416
 def setup(dbfile=None, fresh=0):
