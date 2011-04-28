@@ -13,7 +13,22 @@ MIN_FONT_SIZE = 0.5
 
 # Arbirary list of tags
 TAGS = '''
-.net  2008  3d  advertising  ajax  animation  api  apple  architecture  art  article  articles  audio  blog  blogging  blogs  book  books  business  china  code  collaboration  community  computer  cool  css  culture  database  design  development  diy  download  economics  education  environment  fashion  fic  finance  firefox  flash  flex  food  free  freeware  fun  funny  gallery  game  games  google  graphics  green  hardware  health  history  home  howto  html  humor  illustration  images  inspiration  interesting  internet  iphone  java  javascript  jobs  jquery  language  learning  library  lifehacks  linux  mac  maps  marketing  math  media  microsoft  mobile  money  movies  mp3  music  news  online  opensource  osx  photo  photography  photos  photoshop  php  plugin  politics  portfolio  productivity  programming  python  rails  recipe  recipes  reference  research  resources  ruby  science  search  security  seo  shopping  social  socialmedia  socialnetworking  software  tech  technology  tips  tools  toread  travel  tutorial  tutorials  tv  twitter  typography  ubuntu  video  visualization  web  web2.0  webdesign  webdev  wiki  windows  wordpress  work  writing  youtube  
+.net  2008  3d  advertising  ajax  animation  api  apple  architecture  art
+article  articles  audio  blog  blogging  blogs  book  books  business  china
+code  collaboration  community  computer  cool  css  culture  database  design
+development  diy  download  economics  education  environment  fashion  fic
+finance  firefox  flash  flex  food  free  freeware  fun  funny  gallery  game
+games  google  graphics  green  hardware  health  history  home  howto  html
+humor  illustration  images  inspiration  interesting  internet  iphone  java
+javascript  jobs  jquery  language  learning  library  lifehacks  linux  mac
+maps  marketing  math  media  microsoft  mobile  money  movies  mp3  music  news
+online  opensource  osx  photo  photography  photos  photoshop  php  plugin
+politics  portfolio  productivity  programming  python  rails  recipe  recipes
+reference  research  resources  ruby  science  search  security  seo  shopping
+social  socialmedia  socialnetworking  software  tech  technology  tips  tools
+toread  travel  tutorial  tutorials  tv  twitter  typography  ubuntu  video
+visualization  web  web2.0  webdesign  webdev  wiki  windows  wordpress  work
+writing  youtube
 '''
 
 
