@@ -27,7 +27,7 @@ def convert(pdf):
     jpg = splitext(pdf)[0] + ".jpg"
 
     try:
-        check_call(["convert", pdf, jpg])
+        check_call(["convert", "-quality", "100%", pdf, jpg])
         showinfo("Converted", "{0} converted".format(pdf))
     except (OSError, CalledProcessError) as e:
         showerror("ERROR", "ERROR: {0}".format(e))
