@@ -34,6 +34,7 @@ def convert(pdf):
 
 def main():
     root = tk.Tk()
+    root.title("PDF to JPEG converter")
 
     # PDF File: _________________ [...]
     frame = tk.Frame(root)
