@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          Del.icio.us Keyboard Shortcut
 // @namespace     http://mikitebeka.com
-// @description   CTRL-D to add delicious bookmark.
+// @description   CTRL-M to add delicious bookmark.
 // @author        Miki Tebeka
 // @homepage      http://mikitebeka.com
 // @license       BSD
