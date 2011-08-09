@@ -18,6 +18,7 @@ def show_gui(text=''):
     from operator import isNumberType
 
     root = tk.Tk()
+    root.title('The Humble Calc')
     root.option_add('*font', 'Courier -40 bold')
     root.bind('<Escape>', lambda e: root.quit())
     expr = tk.Entry(root, width=40)
