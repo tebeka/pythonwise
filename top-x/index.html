@@ -43,6 +43,7 @@
 
     <script src="data.js"></script>
     <script>
+        /* Update "legend" when hovering on data */
         function on_hover(event, pos, obj) {
             if (!obj) {
                 return;
@@ -51,16 +52,21 @@
             $("#legend").text(obj.series.label + ': ' + percent + '%');
         }
 
+        /* Handle silde event */
         function on_slide() {
+            /* Pick top X items */
             var num_items = $('#slider').slider('value');
             $('#ntop').text(num_items);
             var items = data.slice(0,  num_items-1);
+
+            /* Calculate rest of items */
             var other = 0;
             for (var i = num_items; i < data.length; i++) {
                 other += data[i].data;
             }
+            /* Add rest-of-words to array */
+            items.unshift({label: 'rest of words', data: other});
 
-            items.unshift({label: 'other', data: other});
             $.plot($("#chart"), items,
             {
                 series: {
@@ -79,12 +85,14 @@
         }
 
         function on_ready() {
+            /* Set slider */
             $('#slider').slider({
                 max: 100,
                 value: 10,
                 min: 1,
                 slide: on_slide,
             });
+            /* Initial draw */
             on_slide();
         }
 
