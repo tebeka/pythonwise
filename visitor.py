@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-
-__author__ = "Miki Tebeka <miki@mikitebeka.com>"
-
 class Visitor:
     '''General visitor'''
     def visit(self, node):
