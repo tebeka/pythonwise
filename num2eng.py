@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 '''Convert number to English words
 $./num2eng.py 1411893848129211
-one quadrillion, four hundred and eleven trillion, eight hundred and ninety 
-three billion, eight hundred and forty eight million, one hundred and twenty 
+one quadrillion, four hundred and eleven trillion, eight hundred and ninety
+three billion, eight hundred and forty eight million, one hundred and twenty
 nine thousand, two hundred and eleven
 $
 
@@ -12,15 +12,12 @@ Modified by Chris Beaven to do the FIXME
 '''
 
 __author__ = 'Miki Tebeka <miki.tebeka@gmail.com>'
-__version__ = '$Revision: 1.1 $'
-
-# $Source: /usr/local/cvsroot/pydotorg/pycon/dc2004/papers/42/ex1-C/num2eng.py,v $
 
 import math
 import re
 
 # Tokens from 1000 and up
-_PRONOUNCE = [ 
+_PRONOUNCE = [
     'vigintillion',
     'novemdecillion',
     'octodecillion',
@@ -125,7 +122,7 @@ def num2eng(num):
     num = str(long(num)) # Convert to string, throw if bad number
     if (len(num) / 3 >= len(_PRONOUNCE)): # Sanity check
         raise ValueError('Number too big')
-        
+
     if num == '0': # Zero is a special case
         return 'zero'
 
