@@ -8,7 +8,7 @@ $
 
 Algorithm from http://mini.net/tcl/591
 
-Modified by Chris Beaven to do the FIXME
+Modified by Chris Beaven to do add last "and"
 '''
 
 __author__ = 'Miki Tebeka <miki.tebeka@gmail.com>'
@@ -113,9 +113,6 @@ def small2eng(num):
     else: # One of the below is empty
         return hundred + ten
 
-#FIXME: Currently num2eng(1012) -> 'one thousand, twelve'
-# do we want to add last 'and'?
-#DONE: 2004/07/1  by Chris Beaven
 def num2eng(num):
     '''English representation of a number'''
     small_first = None
@@ -147,15 +144,24 @@ def num2eng(num):
         pron[-1] = '%s and %s' % (pron[-1], first)
     return ', '.join(pron)
 
-if __name__ == '__main__':
-    from sys import argv, exit
-    from os.path import basename
-    if len(argv) < 2:
-        print 'usage: %s NUMBER[s]' % basename(argv[0])
-        exit(1)
-    for n in argv[1:]:
+def main(argv=None):
+    import sys
+    from argparse import ArgumentParser
+
+    argv = argv or sys.argv
+
+    parser = ArgumentParser(description='')
+    parser.add_argument('numbers', nargs='+')
+    args = parser.parse_args(argv[1:])
+
+    for num in args.numbers:
         try:
-            n = ''.join(re.findall('\d+', n))
-            print num2eng(n)
+            num = ''.join(re.findall('\d+', num))
+            print num2eng(num)
         except ValueError, e:
             print 'Error: %s' % e
+
+
+if __name__ == '__main__':
+    main()
+
