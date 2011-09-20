@@ -11,10 +11,13 @@ Algorithm from http://mini.net/tcl/591
 Modified by Chris Beaven to do the FIXME
 '''
 
-__author__ = 'Miki Tebeka <miki@mikitebeka.com>'
+__author__ = 'Miki Tebeka <miki.tebeka@gmail.com>'
+__version__ = '$Revision: 1.1 $'
 
+# $Source: /usr/local/cvsroot/pydotorg/pycon/dc2004/papers/42/ex1-C/num2eng.py,v $
 
 import math
+import re
 
 # Tokens from 1000 and up
 _PRONOUNCE = [ 
@@ -155,7 +158,7 @@ if __name__ == '__main__':
         exit(1)
     for n in argv[1:]:
         try:
+            n = ''.join(re.findall('\d+', n))
             print num2eng(n)
         except ValueError, e:
             print 'Error: %s' % e
-
