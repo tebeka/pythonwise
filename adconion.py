@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-'''Disable/enable connection to Adconion Jabber in Pidgin using dbus'''
+'''Disable/enable connection to Adconion Jabber in Pidgin using dbus.'''
 
 import dbus
 from os import environ
