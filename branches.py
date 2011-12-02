@@ -24,9 +24,9 @@ def jira_credentials():
         data = json.load(fo)
         return data['user'], data['password']
 
-def jira_connect(user, password):
+def jira_connect(url, user, password):
     '''Connect to JIRA, return proxy object and token.'''
-    jira = ServerProxy().jira1
+    jira = ServerProxy(url).jira1
     token = jira.login(user, password)
     return jira, token
 
@@ -62,12 +62,12 @@ def main(argv=None):
     args = parser.parse_args(argv[1:])
 
     user, password = jira_credentials()
-    jira, token = jira_connect(user, password)
+    jira, token = jira_connect(args.jira_url, user, password)
 
     for branch in branches(args.project):
         desc = issue_description(branch, jira, token)
         parent = branch_parent(branch)
-        if parent != 'default':
+        if parent and (parent != 'default'):
             desc = '{0} [{1}]'.format(desc, parent)
         print("{0}: {1}".format(branch, desc))
 
