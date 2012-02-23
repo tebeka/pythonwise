@@ -25,7 +25,7 @@ class mock:
             self.mocks = args[0]
 
     def __enter__(self):
-        self.orig = self.obj.__dict__
+        self.orig = self.obj.__dict__.copy()
         self.obj.__dict__.update(self.mocks)
         return self
 
