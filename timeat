@@ -10,6 +10,7 @@ google_key = (
     'your-google-key-goes-here'
 )
 
+
 def timeat(location):
     query = urlencode([('q', location), ('key', google_key)])
     url = 'http://maps.google.com/maps/geo?{}'.format(query)
@@ -30,6 +31,7 @@ def timeat(location):
             if element.tag == 'localtime':
                 yield place, element.text
                 break
+
 
 def main(argv=None):
     import sys
