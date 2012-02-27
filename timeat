@@ -7,52 +7,50 @@ import json
 from xml.etree.cElementTree import iterparse
 
 google_key = (
-    "ABQIAAAAet8IFrmrJ_pomL8rTFXEyxSo7y1pJQguvgOA"
-    "XVoQyu7YX5GThxSGUNH1P9UT48nxNUi2Ffu0FQpkWw"
+    'your-google-key-goes-here'
 )
 
 def timeat(location):
-    query = urlencode([("q", location), ("key", google_key)])
-    url = "http://maps.google.com/maps/geo?%s" % query
+    query = urlencode([('q', location), ('key', google_key)])
+    url = 'http://maps.google.com/maps/geo?{}'.format(query)
     try:
         # Sadly, sometimes google sends request that can't be encoded in utf-8
         location = json.load(urlopen(url))
     except UnicodeDecodeError:
         return
 
-    if location["Status"]["code"] != 200:
+    if location['Status']['code'] != 200:
         return
 
-    for placemark in location["Placemark"]:
-        lng, lat, h = placemark["Point"]["coordinates"]
-        place = placemark["address"]
-        url = "http://www.earthtools.org/timezone/%s/%s" % (lat, lng)
+    for placemark in location['Placemark']:
+        lng, lat, h = placemark['Point']['coordinates']
+        place = placemark['address']
+        url = 'http://www.earthtools.org/timezone/%s/%s' % (lat, lng)
         for event, element in iterparse(urlopen(url)):
-            if element.tag == "localtime":
+            if element.tag == 'localtime':
                 yield place, element.text
                 break
 
 def main(argv=None):
     import sys
-    from optparse import OptionParser
+    from argparse import ArgumentParser
 
     argv = argv or sys.argv
 
-    parser = OptionParser("%prog LOCATION ...")
-    opts, args = parser.parse_args(argv[1:])
-    if len(args) < 1:
-        parser.error("wrong number of arguments") # Will exit
+    parser = ArgumentParser()
+    parser.add_argument('location', help='location to get time at')
+    args = parser.parse_args(argv[1:])
 
-    location = " ".join(args)
     try:
-        matches = list(timeat(location))
+        matches = list(timeat(args.location))
         if not matches:
-            raise SystemExit("error: can't find time for `%s`" % location)
+            raise SystemExit(
+                'error: cannot find time for `{}`'.format(args.location))
 
         for addr, time in matches:
-            print "%s: %s" % (addr, time)
-    except IOError, e:
-        raise SystemExit("error: %s" % e)
+            print('{}: {}'.format(addr, time))
+    except IOError as e:
+        raise SystemExit('error: {}'.format(e))
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
