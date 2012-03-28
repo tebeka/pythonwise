@@ -146,7 +146,7 @@ def _test():
     t.daemon = True
     t.start()
 
-
+    print('Serving metrics at http://localhost:{}'.format(args.port))
     # There's no way to "join" a server
     try:
         while True:
