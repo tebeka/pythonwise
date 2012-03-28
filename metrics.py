@@ -9,7 +9,6 @@ from cStringIO import StringIO
 from operator import add, sub
 from threading import RLock, Thread
 import json
-import cgi
 from time import sleep, time
 
 _LOCK = RLock()
