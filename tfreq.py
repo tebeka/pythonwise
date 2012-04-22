@@ -5,7 +5,7 @@ import json
 from urllib import urlopen, urlencode
 from datetime import datetime, timedelta
 import re
-from collections import defaultdict
+from collections import Counter
 
 base = 'https://api.twitter.com/1'  # Base Twitter API url
 
@@ -49,9 +49,7 @@ def main(argv=None):
     user_id = name2id(args.user)
 
     # Store count per day
-    by_day = defaultdict(int)
-    for time in post_times(user_id):
-        by_day[time.date()] += 1
+    by_day = Counter(time.date() for time in post_times(user_id))
 
     # Fill missing days with zeros
     start, end = min(by_day.keys()), max(by_day.keys())
