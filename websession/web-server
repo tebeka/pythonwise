@@ -23,7 +23,7 @@ def main(argv=None):
 
     # Monkey patch the default CGI request handler
     def is_cgi(self):
-        if not self.path.endswith(".cgi"):
+        if not self.path.endswith(".py"):
             return 0
         self.cgi_info = ("", self.path[1:])
         return 1
