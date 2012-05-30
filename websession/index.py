@@ -2,23 +2,28 @@
 
 from websession import WebSession
 
-session = WebSession()
+def main():
 
-key = "key"
-old = session.get(key, 0)
-new = old + 1
-session[key] = new
+    session = WebSession()
 
-print session.cookie
-print "Content-Type: text/html"
-print
+    key = 'key'
+    old = session.get(key, 0)
+    new = old + 1
+    session[key] = new
 
-print "<html><body>"
-print "<pre>"
-print "session id: %s" % session.id
-print "old: %s" % old
-print "new: %s" % new
-print "</pre>"
-print "</body></html>"
+    print(session.cookie)
+    html = '''Content-Type: text/html
 
-session.save()
+    <html><body>
+    <pre>
+    session id: {}
+    old: {}
+    new: {}
+    </pre>
+    </body></html>'''.format(key, old, new)
+    print(html)
+
+    session.save()
+
+if __name__ == '__main__':
+    main()
