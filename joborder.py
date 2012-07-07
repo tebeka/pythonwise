@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 '''Show dependencies of Azkaban jobs.
 
+Depenencies are in *.job files with a line starting with 'dependencies='.
+
 You'll need graphviz "dot" utility in your path.
 '''
 
@@ -32,8 +34,8 @@ def main(argv=None):
     if not jobfiles:
         raise SystemExit('error: no *.job files in {}'.format(args.directory))
 
+    # Dependency line: dependencies=cooljob
     find_dep = re.compile('dependencies=(\w+)').search
-
 
     dotfile = NamedTemporaryFile(delete=not args.keep, suffix='.dot')
     if args.keep:
@@ -68,4 +70,3 @@ def main(argv=None):
 
 if __name__ == '__main__':
     main()
-
