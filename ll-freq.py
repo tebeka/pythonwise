@@ -19,11 +19,11 @@ def plot(freq, filename):
     width = 0.35  # Bar width (also used for xticks positioning)
 
     idx = np.arange(len(freq))
-    xs = sorted(freq)
-    ys = [freq[x] for x in xs]
+    xs = sorted(freq)  # Letters in alphabetic order
+    ys = [freq[x] for x in xs]  # Frequency
 
     plt.bar(idx, ys, width=width)
-    plt.xticks(idx + width/2., xs)
+    plt.xticks(idx + width/2., xs)  # Annotate X axis
     plt.title('Last Letter Frequency')
     plt.savefig(filename)
 
