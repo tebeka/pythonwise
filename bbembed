@@ -1,0 +1,14 @@
+#!/bin/bash
+
+case $1 in
+    -h | --help ) echo "usage: $(basename $0) FILE"; exit;;
+esac
+
+if [ $# -ne 1 ]; then
+    $0 -h
+    exit 1
+fi
+
+cat << EOF | xsel -i
+<script src="https://bitbucket.org/tebeka/pythonwise/src/tip/${1}?embed=t"></script>
+EOF
