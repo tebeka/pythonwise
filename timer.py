@@ -5,6 +5,9 @@ from time import time
 
 class Timer(object):
     def __init__(self, name, log=None):
+        '''name: timer name
+           log: log function, most probably logger.info
+        '''
         self.name = name
         self.log = log or (lambda message: stdout.write(message + '\n'))
 
