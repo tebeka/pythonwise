@@ -3,8 +3,8 @@
 # So that 8/3 will be 2.6666 and not 2
 from __future__ import division
 
-__author__ = "Miki Tebeka <miki@mikitebeka.com>"
-__version__ = "0.0.2"
+__author__ = 'Miki Tebeka <miki@mikitebeka.com>'
+__version__ = '0.0.2'
 
 # Calculator GUI:
 
@@ -16,14 +16,14 @@ __version__ = "0.0.2"
 # [    =     ]
 
 import wx
-# So we can evaluate "sqrt(8)"
+# So we can evaluate 'sqrt(8)'
 from math import *
 
 class Calculator(wx.Dialog):
    '''Main calculator dialog'''
    def __init__(self):
-       title = "Calculator version %s" % __version__
-       wx.Dialog.__init__(self, None, -1, title)   
+       title = 'Calculator version %s' % __version__
+       wx.Dialog.__init__(self, None, -1, title)
        sizer = wx.BoxSizer(wx.VERTICAL) # Main vertical sizer
 
        # ____________v
@@ -35,10 +35,10 @@ class Calculator(wx.Dialog):
        # [1][2][3][-]
        # [0][.][C][+]
        gsizer = wx.GridSizer(4, 4)
-       for row in (("7", "8", "9", "/"),
-                   ("4", "5", "6", "*"),
-                   ("1", "2", "3", "-"),
-                   ("0", ".", "C", "+")):
+       for row in (('7', '8', '9', '/'),
+                   ('4', '5', '6', '*'),
+                   ('1', '2', '3', '-'),
+                   ('0', '.', 'C', '+')):
            for label in row:
                b = wx.Button(self, -1, label)
                gsizer.Add(b)
@@ -46,7 +46,7 @@ class Calculator(wx.Dialog):
        sizer.Add(gsizer, 1, wx.EXPAND)
 
        # [    =     ]
-       b = wx.Button(self, -1, "=")
+       b = wx.Button(self, -1, '=')
        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
        sizer.Add(b, 0, wx.EXPAND)
        self.equal = b
@@ -61,7 +61,7 @@ class Calculator(wx.Dialog):
        # Get title of clicked button
        label = evt.GetEventObject().GetLabel()
 
-       if label == "=": # Calculate
+       if label == '=': # Calculate
            try:
                compute = self.display.GetValue()
                # Ignore empty calculation
@@ -73,21 +73,21 @@ class Calculator(wx.Dialog):
 
                # Add to history
                self.display.Insert(compute, 0)
-              
+
                # Show result
                self.display.SetValue(str(result))
-           except Exception, e:
-               wx.LogError(str(e))
+           except Exception as err:
+               wx.LogError(str(err))
                return
 
-       elif label == "C": # Clear
-           self.display.SetValue("")
+       elif label == 'C': # Clear
+           self.display.SetValue('')
 
        else: # Just add button text to current calculation
            self.display.SetValue(self.display.GetValue() + label)
            self.equal.SetFocus() # Set the [=] button in focus
 
-if __name__ == "__main__":
+if __name__ == '__main__':
    # Run the application
    app = wx.PySimpleApp()
    dlg = Calculator()
