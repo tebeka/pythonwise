@@ -3,9 +3,16 @@
 ImageMagick's "convert"
 '''
 
-import Tkinter as tk
-from tkFileDialog import askopenfilename
-from tkMessageBox import showerror, showinfo
+from sys import version_info
+
+if version_info[0] > 2:
+    import tkinter as tk
+    from tkinter.filedialog import askopenfilename
+    from tkinter.messagebox import showerror, showinfo
+else:
+    import Tkinter as tk
+    from tkFileDialog import askopenfilename
+    from tkMessageBox import showerror, showinfo
 from subprocess import check_call, CalledProcessError
 from os.path import isfile, splitext
 
