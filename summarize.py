@@ -128,7 +128,8 @@ def main(argv=None):
         help='file to summarize (stdin will be used otherwise)')
     parser.add_argument('-s', '--size', help='Size of summary',
                         default=MAX_SUMMARY_SIZE, type=int)
-    parser.add_argument('--test', help='test')
+    parser.add_argument('--test', help='test', action='store_true',
+                        default=False)
     args = parser.parse_args(argv[1:])
 
     if args.test:
