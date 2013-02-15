@@ -22,6 +22,7 @@ def try_lock(keyfn=None):
         def push(day, records):
             ...
     '''
+    keyfn = keyfn or (lambda args, kw: 7)  # Return the same key
     by_key_locks = defaultdict(RLock)
     master_lock = RLock()
 
