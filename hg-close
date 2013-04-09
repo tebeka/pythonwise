@@ -13,6 +13,7 @@ fi
 
 comment=${2-Closing $1}
 
+# Exit on first error
 set -e
 current=$(hg branch)
 hg co -q -C $1
