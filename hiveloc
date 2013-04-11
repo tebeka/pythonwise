@@ -1,0 +1,29 @@
+#!/bin/bash
+# Show location in HDFS of a Hive table
+
+case $1 in
+    -h | --help ) echo "usage: $(basename $0) TABLE"; exit;;
+esac
+
+if [ $# -ne 1 ]; then
+    $0 -h
+    exit 1
+fi
+
+
+# Store stderr to display error
+err=$(mktemp)
+out=$(hive client -S -e "DESCRIBE EXTENDED ${1}" 2>${err})
+
+trap "rm -f ${err}" EXIT INT
+# Of course hive won't return error to the os, assume empty output is error
+if [ -z "${out}" ]; then
+    cat ${err}
+    exit 1
+fi
+
+# We're looking for something like 
+# location:hdfs://nameservice1/user/beeswax/warehouse/people,
+echo "${out}" | \
+    egrep -o 'location:[^,]+' | \
+    sed 's/location://'
