@@ -13,9 +13,11 @@ fi
 
 # Store stderr to display error
 err=$(mktemp)
+# Cleanup the error file
+trap "rm -f ${err}" EXIT INT
+
 out=$(hive client -S -e "DESCRIBE EXTENDED ${1}" 2>${err})
 
-trap "rm -f ${err}" EXIT INT
 # Of course hive won't return error to the os, assume empty output is error
 if [ -z "${out}" ]; then
     cat ${err}
