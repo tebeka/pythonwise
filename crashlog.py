@@ -3,8 +3,6 @@ Use in your code:
 import crashlog; crashlog.install(emails=["duffy@duck.com"])
 '''
 
-from __future__ import with_statement
-
 __author__ = "Miki Tebeka <miki@mikitebeka.com>"
 
 import sys
