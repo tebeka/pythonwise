@@ -1,18 +1,13 @@
 #!/usr/bin/env python
 
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
-from urlparse import urlparse
-from urllib2 import urlopen
-from operator import itemgetter
+from functools import partial
 from rfc822 import parsedate_tz
 from time import strftime
+from urllib2 import urlopen
+from urlparse import urlparse
+import json
 import re
-from functools import partial
-
-try:
-    import json
-except ImportError:
-    import simplejson as json
 
 HTML = '''
 <html>
@@ -43,7 +38,9 @@ HTML = '''
         <hr />
         By <a href="mailto:miki@mikitebeka.com">Miki</a>
     </body>
-    <script src="jquery.js"></script>
+    <script
+        src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js">
+    </script>
     <script>
         var running = 0;
 
@@ -72,8 +69,8 @@ HTML = '''
             var button = $('#run');
             if (button.text() == "Go") {
                 var query = $.trim($('#query').val());
-                /* FIXME: The best way will be to disable the button until there
-                  is text
+                /* FIXME: The best way will be to disable the button until
+                  there is text
                 */
                 if (query.length == 0) {
                     alert("Please enter *something*");
@@ -98,21 +95,24 @@ HTML = '''
 </html>
 '''
 
+
 def format_time(time):
     # Wed, 11 Feb 2009 00:10:36 +0000
     time = parsedate_tz(time)
     return strftime("%m/%d/%Y %H:%M", time[:9])
 
-# 'http://mikitebeka.com' -> 
+# 'http://mikitebeka.com' ->
 # '<a href="http://mikitebeka.com">http://mikitebeka.com</a>'
 inject_links = partial(
-    re.compile("(http://[^ ]+)").sub, 
+    re.compile("(http://[^ ]+)").sub,
     "<a target=\"_new\" href=\"\\1\">\\1</a>")
+
 
 def format_result(result):
     time = format_time(result["created_at"])
     text = inject_links(result["text"])
     return "[%s] %s" % (time, text)
+
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -136,4 +136,3 @@ class RequestHandler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     server = HTTPServer(("", 8888), RequestHandler)
     server.serve_forever()
-
