@@ -1,5 +1,9 @@
 #!/usr/bin/env python2
-'''Serving dynamic images with matplotlib (using flask).'''
+'''Serving dynamic images with matplotlib (using flask).
+
+The data is served inside the <img ...> tag, no need for extra resource
+handler.
+'''
 
 # No windows should pop up in a web server
 import matplotlib
