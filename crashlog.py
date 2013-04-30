@@ -22,9 +22,9 @@ _PREV_EXCEPTHOOK = None
 
 def send_email(emails, program, message):
     message = MIMEText(message)
-    message['Subject'] = '%s crashed' % program
+    message['Subject'] = '{} crashed'.format(program)
     crashlog_email = 'noreply@somewhere.com'
-    message['From'] = 'Crashlog <%s>' % crashlog_email
+    message['From'] = 'Crashlog <{}>'.format(crashlog_email)
 
     smtp = SMTP('mailhost.somewhere.com')
     smtp.sendmail(crashlog_email, _EMAILS, message.as_string())
@@ -32,7 +32,7 @@ def send_email(emails, program, message):
 
 def format_message(type, value, traceback):
     message = StringIO()
-    out = lambda m: message.write(u'%s\n' % m)
+    out = lambda m: message.write(u'{}\n'.format(m))
 
     out(ctime())
     out('== Traceback ==')
@@ -41,7 +41,7 @@ def format_message(type, value, traceback):
     out(' '.join(sys.argv))
     out('\n== Environment ==')
     for key, value in environ.items():
-        out('%s = %s' % (key, value))
+        out('{} = {}'.format(key, value))
 
     return message.getvalue()
 
@@ -57,7 +57,7 @@ def excepthook(type, value, traceback):
 
         if _LOGFILE:
             with open(_LOGFILE, 'at') as fo:
-                print >> fo, message
+                fo.write('{}\n'.format(message))
 
     finally:
         if _PREV_EXCEPTHOOK:
