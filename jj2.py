@@ -53,7 +53,7 @@ def main(argv=None):
     if args.vars_file:
         tvars.update(load_vars(args.vars_file))
 
-    tvars.update(parse_cmdline_vars(args.var))
+    tvars.update(parse_cmdline_vars(args.var or []))
 
     # Fail on undefined
     env = jinja2.Environment(undefined=jinja2.StrictUndefined)
