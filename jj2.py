@@ -3,6 +3,13 @@
 
 Template variables can be passed either via the command line (using -vX=Y) or
 via a JSON/YAML configuration file (using -i /path/to/vars.json)
+
+Example:
+
+    $ echo 'Hello {{name}}' > template.txt
+    $ jj2.py -v name=Bugs template.txt
+    Hello Bugs
+    $
 '''
 
 import jinja2
