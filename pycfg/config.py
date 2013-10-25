@@ -4,20 +4,13 @@
 # If this file is in PYTHONPATH, then 'import config'
 # Otherwise, something like the following should work (Python 2x)
 #
-#    from os.path import dirname
-#    import sys
-#
 #    def load_config(path):
 #        class _cfg: pass
 #        cfg = _cfg()
+#        cfg.__file__ = path
 #
-#        parent = dirname(path)
-#        sys.path.insert(0, parent)
-#        try:
-#            execfile(path, {}, cfg.__dict__)
-#            return cfg
-#        finally:
-#            sys.path.pop(0)
+#        execfile(path, {}, cfg.__dict__)
+#        return cfg
 
 # Overrideable configuration, keep it flat
 web_host = 'localhost'
@@ -27,9 +20,16 @@ web_port = 8080
 # change. In this example we have only the line 'web_port = 8000' in
 # config_local.py
 try:
+    import sys as __sys
+    from os.path import dirname as __dirname
+    __sys.path.insert(0, __dirname(__file__))
+
     from config_local import *  # NOQA
 except ImportError:  # Catch only ImportError here
     pass
+finally:
+    __sys.path.pop(0)
+    del __sys, __dirname  # Keep namespace clean
 
 # Here's it after overriding, we can construct more Pythonic objects here
 
