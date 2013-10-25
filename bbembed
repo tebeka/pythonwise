@@ -9,6 +9,6 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-cat << EOF | xsel -i
+cat << EOF | xsel -b
 <script src="https://bitbucket.org/tebeka/pythonwise/src/tip/${1}?embed=t"></script>
 EOF
