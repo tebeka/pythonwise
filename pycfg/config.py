@@ -23,7 +23,9 @@
 web_host = 'localhost'
 web_port = 8080
 
-# Overriding
+# Overriding is easy, just add config_local.py and write the values you want to
+# change. In this example we have only the line 'web_port = 8000' in
+# config_local.py
 try:
     from config_local import *  # NOQA
 except ImportError:  # Catch only ImportError here
