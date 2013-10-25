@@ -4,13 +4,19 @@
 # If this file is in PYTHONPATH, then 'import config'
 # Otherwise, something like the following should work (Python 2x)
 #
-#    def load_config(path):
-#        class _cfg: pass
-#        cfg = _cfg()
-#        cfg.__file__ = path
+#    from os.path import dirname
+#    import sys
+#    import imp
 #
-#        execfile(path, {}, cfg.__dict__)
-#        return cfg
+#    def load_config(path):
+#        imp.acquire_lock()
+#        try:
+#            sys.path.insert(0, dirname(path))
+#            return imp.load_source('cfg', path)
+#        finally:
+#            sys.path.pop(0)
+#            imp.release_lock()
+
 
 # Overrideable configuration, keep it flat
 web_host = 'localhost'
