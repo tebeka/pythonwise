@@ -31,7 +31,7 @@ def main(argv=None):
     argv = argv or sys.argv
 
     parser = ArgumentParser(description='Show emoji')
-    parser.add_argument('query', help='query string')
+    parser.add_argument('query', help='query string', nargs='?')
     parser.add_argument('--show', '-s', help='show images',
                         action='store_true', default=False)
     args = parser.parse_args(argv[1:])
@@ -43,7 +43,7 @@ def main(argv=None):
     with open(filename) as fo:
         data = fo.read()
 
-    regexp = ':.*{}.*:'.format(args.query)
+    regexp = ':.*{}.*:'.format(args.query or '')
     for match in re.findall(regexp, data):
         print(match)
         if args.show:
