@@ -13,8 +13,8 @@ plt.hist(values, bins=20)  # We'll get the below before the chart
 #  <a list of 20 Patch objects>)
 
 # Option 1: Use assignment
-_ = plt.hist(values, bins=20)  # Remove noise (option 1)
+_ = plt.hist(values, bins=20)  # Remove noise
 
 # Option 2: Dummy last expression
-plt.hist(values, bins=20)  # Remove noise (option 1)
-None
+plt.hist(values, bins=20)
+None # Remove noise
