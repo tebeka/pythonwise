@@ -41,9 +41,6 @@ def main(argv=None):
     except CalledProcessError:
         raise SystemExit('error: not password for {}'.format(domain))
 
-    with open('/tmp/p', 'w') as fo:
-        fo.write(out)
-
     user = find_key(find_user, out)
     if not user:
         raise SystemExit('error: cannot find user for {}'.format(domain))
