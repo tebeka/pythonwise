@@ -1,6 +1,8 @@
 #!/usr/bin/env python2
 '''Show user twitter post frequency.
 
+You'll need to install the Python "twitter" package - `pip install twitter`
+
 You'll need you twitter credientials (from
 https://dev.twitter.com/apps/<app-id>/show in ~/.twitter
 
