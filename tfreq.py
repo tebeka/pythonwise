@@ -1,39 +1,40 @@
-#!/usr/bin/env python
-'''Show twitter user post frequency.'''
+#!/usr/bin/env python2
+'''Show user twitter post frequency.
 
-import json
-from urllib import urlopen, urlencode
-from datetime import datetime, timedelta
-import re
+You'll need you twitter credientials (from
+https://dev.twitter.com/apps/<app-id>/show in ~/.twitter
+
+~/.twitter should be in the following format (JSON)
+
+    {
+        "token": "<access token>",
+        "token_secret": "<access token secert>",
+        "consumer_key": "<consumer key>",
+        "consumer_secret": "<consumer secret>"
+    }
+'''
+
+from twitter import OAuth, Twitter
+
 from collections import Counter
+from datetime import datetime, timedelta
+from os.path import expanduser, isfile
+import json
+import re
 
-base = 'https://api.twitter.com/1'  # Base Twitter API url
 
-
-def name2id(user_name):
-    '''Convert twitter user name to user id.'''
-    url = '{}/users/lookup.json?screen_name={}'.format(base, user_name)
-    reply = json.load(urlopen(url))
-    return reply[0]['id']
+auth_file = expanduser('~/.twitter')
 
 
 def parse_time(value):
-    '''Parser twitter post time to a datetime object.'''
     # Sat Apr 21 10:38:38 +0000 2012
     value = re.sub(' [+-]\d{4} ', ' ', value)  # Remove timezone
     return datetime.strptime(value, '%a %b %d %H:%M:%S %Y')
 
 
-def post_times(user_id):
-    '''Post times for user.'''
-    args = {
-        'user_id': user_id,
-        'count': '200'  # Max allowed by twitter API
-    }
-    url = '{}/statuses/user_timeline.json?{}'.format(base, urlencode(args))
-    posts = json.load(urlopen(url))
-    for post in posts:
-        yield parse_time(post['created_at'])
+def load_auth(filename):
+    with open(filename) as fo:
+        return json.load(fo)
 
 
 def main(argv=None):
@@ -42,14 +43,18 @@ def main(argv=None):
 
     argv = argv or sys.argv
 
-    parser = ArgumentParser(description='')
+    parser = ArgumentParser(description='Show user twitter frequency')
     parser.add_argument('user', help='twitter user name')
     args = parser.parse_args(argv[1:])
 
-    user_id = name2id(args.user)
+    if not isfile(auth_file):
+        raise SystemExit('error: cannot find auth file {}'.format(auth_file))
 
-    # Store count per day
-    by_day = Counter(time.date() for time in post_times(user_id))
+    auth_opts = load_auth(auth_file)
+    twitter = Twitter(auth=OAuth(**auth_opts))
+    posts = twitter.statuses.user_timeline(screen_name=args.user, count=200)
+
+    by_day = Counter(parse_time(post['created_at']).date() for post in posts)
 
     # Fill missing days with zeros
     start, end = min(by_day.keys()), max(by_day.keys())
@@ -60,11 +65,10 @@ def main(argv=None):
             by_day[current] = 0
         current += day
 
-    # Print statistics
     freqs = sorted(by_day.values())
     print('sample size: {} ({} -> {})'.format(len(freqs), start, end))
     print('average: {:.02f}/day'.format(sum(freqs) / float(len(freqs))))
-    print('median: {}/day'.format(freqs[len(freqs) / 2]))
+    print('median: {}/day'.format(freqs[len(freqs)/2]))
     print('max: {}'.format(max(freqs)))
 
 
