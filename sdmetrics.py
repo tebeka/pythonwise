@@ -22,6 +22,7 @@ Example::
     def add(x, y):
         return x + 7
 
+
 Will result in the following metrics:
     * stats.counters.math.add.num_runs
     * stats.counters.math.add.num_failed
@@ -54,7 +55,13 @@ def get_client():
 
 
 class metered(object):
-    '''A context manager sending metrics to statsd.'''
+    '''A context manager sending metrics to statsd.
+
+    Usage:
+
+        with metered('summary'):
+            cursor.execute(summary_sql)
+    '''
     def __init__(self, name):
         prefix = '{}.{}'.format(_prefix, name)
         self.runs = '{}.num_runs'.format(prefix)
@@ -77,7 +84,15 @@ class metered(object):
 
 
 def metrics(fn):
-    '''A decorator manager sending metrics to statsd.'''
+    '''A decorator manager sending metrics to statsd.
+
+    Usage:
+
+        @metrics
+        def add(x, y):
+            return x + y
+
+    '''
     name = fn.__name__
 
     @wraps(fn)
