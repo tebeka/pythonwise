@@ -11,7 +11,7 @@ the following metrics:
     # Timers
     - <prefix>.<name>
 
-StatsD server,port and <prefix> are defined in the config module.
+StatsD server, port and <prefix> are defined in the config module.
 
 Example::
 
