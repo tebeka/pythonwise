@@ -1,36 +1,34 @@
-#!/usr/bin/env python
-# Small mash between Google maps API and earthtools API to get the current time
-# at a given location
+#!/usr/bin/env python2
+# Using Google maps API to get the current time at a given location
 
 from urllib import urlopen, urlencode
 import json
-from xml.etree.cElementTree import iterparse
+from time import time, gmtime, strftime
 
-google_key = (
-    'your-google-key-goes-here'
-)
+api_base = 'https://maps.googleapis.com/maps/api'
+geo_url = '{}/geocode/json'.format(api_base)
+tz_url = '{}/timezone/json'.format(api_base)
 
 
 def timeat(location):
-    query = urlencode([('q', location), ('key', google_key)])
-    url = 'http://maps.google.com/maps/geo?{}'.format(query)
-    try:
-        # Sadly, sometimes google sends request that can't be encoded in utf-8
-        location = json.load(urlopen(url))
-    except UnicodeDecodeError:
+    query = urlencode([('address', location)])
+    url = '{}?{}'.format(geo_url, query)
+    loc_resp = json.load(urlopen(url))
+    if loc_resp['status'] != 'OK':
         return
 
-    if location['Status']['code'] != 200:
-        return
+    now = int(time())
+    for loc in loc_resp['results']:
+        geo = loc['geometry']['location']
+        query = urlencode([
+            ('timestamp', str(now)),
+            ('location', '{},{}'.format(geo['lat'], geo['lng'])),
+        ])
+        url = '{}?{}'.format(tz_url, query)
+        tz = json.load(urlopen(url))
 
-    for placemark in location['Placemark']:
-        lng, lat, h = placemark['Point']['coordinates']
-        place = placemark['address']
-        url = 'http://www.earthtools.org/timezone/%s/%s' % (lat, lng)
-        for event, element in iterparse(urlopen(url)):
-            if element.tag == 'localtime':
-                yield place, element.text
-                break
+        local = gmtime(now + tz['dstOffset'] + tz['rawOffset'])
+        yield loc['formatted_address'], strftime('%a %b %d, %Y %H:%M', local)
 
 
 def main(argv=None):
@@ -44,13 +42,14 @@ def main(argv=None):
     args = parser.parse_args(argv[1:])
 
     try:
-        matches = list(timeat(args.location))
-        if not matches:
+        n = 0
+        for n, (addr, time) in enumerate(timeat(args.location), 1):
+            print('{}: {}'.format(addr, time))
+
+        if n == 0:
             raise SystemExit(
                 'error: cannot find time for `{}`'.format(args.location))
 
-        for addr, time in matches:
-            print('{}: {}'.format(addr, time))
     except IOError as e:
         raise SystemExit('error: {}'.format(e))
 
