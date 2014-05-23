@@ -1,9 +1,9 @@
 #!/usr/bin/env python2
 # Using Google maps API to get the current time at a given location
 
+from time import time, gmtime, strftime
 from urllib import urlopen, urlencode
 import json
-from time import time, gmtime, strftime
 
 api_base = 'https://maps.googleapis.com/maps/api'
 geo_url = '{}/geocode/json'.format(api_base)
