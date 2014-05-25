@@ -1,19 +1,31 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 # Using Google maps API to get the current time at a given location
 
 from time import time, gmtime, strftime
-from urllib import urlopen, urlencode
 import json
+import sys
+
+if sys.version_info[:2] >= (3, 0):
+    from urllib.request import urlopen
+    from urllib.parse import urlencode
+else:
+    from urllib import urlopen, urlencode
 
 api_base = 'https://maps.googleapis.com/maps/api'
 geo_url = '{}/geocode/json'.format(api_base)
 tz_url = '{}/timezone/json'.format(api_base)
 
 
+def get_json(url):
+    fo = urlopen(url)
+    data = fo.read().decode('utf-8')
+    return json.loads(data)
+
+
 def timeat(location):
     query = urlencode([('address', location)])
     url = '{}?{}'.format(geo_url, query)
-    loc_resp = json.load(urlopen(url))
+    loc_resp = get_json(url)
     if loc_resp['status'] != 'OK':
         return
 
@@ -25,7 +37,7 @@ def timeat(location):
             ('location', '{},{}'.format(geo['lat'], geo['lng'])),
         ])
         url = '{}?{}'.format(tz_url, query)
-        tz = json.load(urlopen(url))
+        tz = get_json(url)
 
         local = gmtime(now + tz['dstOffset'] + tz['rawOffset'])
         yield loc['formatted_address'], strftime('%a %b %d, %Y %H:%M', local)
