@@ -3,7 +3,6 @@
 
 from twisted.words.protocols import irc
 from twisted.internet.protocol import ReconnectingClientFactory
-import re
 from subprocess import Popen, PIPE
 from xml.etree.cElementTree import parse as xmlparse
 from cStringIO import StringIO
