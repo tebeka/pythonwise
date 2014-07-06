@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# A post checkout hook that update tasks when switching branches
+# This assumes your project is sources are in `awesome` and tests are in `tests`
+# directories.
+
+# Copy this script to .git/hooks
+
+ctags -R awesome tests
