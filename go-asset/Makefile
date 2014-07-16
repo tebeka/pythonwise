@@ -5,9 +5,7 @@ clean:
 	rm -f httpd
 	rm -f image.go
 
-
 fresh: clean httpd
-
 
 # Create image byte array using xxd, the sed command adds last comma
 image.go: image.png
@@ -17,6 +15,5 @@ image.go: image.png
 	xxd -i $< | egrep -i '^[[:space:]]*0x' | sed 's/\([^,]\)$$/\1,/' >> $@
 	echo '}' >> $@
 	go fmt $@
-
 
 .PHONY: clean fresh
