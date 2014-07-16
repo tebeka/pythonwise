@@ -19,4 +19,4 @@ image.go: image.png
 	go fmt $@
 
 
-.PHONY: test clean fresh
+.PHONY: clean fresh
