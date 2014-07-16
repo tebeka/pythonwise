@@ -8,3 +8,5 @@ dynamic-static/lighttpd.pid
 macapp/HumbleCalc.*
 pandas-validation/points.h5
 venv
+go-asset/httpd
+go-asset/image.go
