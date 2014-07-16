@@ -9,10 +9,12 @@ clean:
 fresh: clean httpd
 
 
+# Create image byte array using xxd, the sed command adds last comma
 image.go: image.png
+	echo $<
 	echo 'package main' > $@
 	echo 'var image = []byte{' >> $@
-	xxd -i $< | egrep '^[[:space:]]*0x' | sed 's/[^,]$$/,/' >> $@
+	xxd -i $< | egrep -i '^[[:space:]]*0x' | sed 's/\([^,]\)$$/\1,/' >> $@
 	echo '}' >> $@
 	go fmt $@
 
