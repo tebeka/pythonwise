@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # Using Google maps API to get the current time at a given location
 
+from socket import AF_INET, SOCK_DGRAM, socket, error as SocketError
 from time import time, gmtime, strftime
 import json
+import struct
 import sys
 
 if sys.version_info[:2] >= (3, 0):
@@ -22,6 +24,23 @@ def get_json(url):
     return json.loads(data)
 
 
+def current_time():
+    '''Try to get current time from NTP server, default to local if can't get
+    it.'''
+    sock = socket(AF_INET, SOCK_DGRAM)
+    msg = ('\x1b' + 47 * '\0').encode('ascii')
+    try:
+        sock.settimeout(2)
+        sock.sendto(msg, ('pool.ntp.org', 123))
+    except SocketError:
+        return int(time())
+
+    msg, _ = sock.recvfrom(1024)
+
+    t = struct.unpack( "!12I", msg)[10]
+    return t - 2208988800 # 1970-01-01 00:00:00
+
+
 def timeat(location):
     query = urlencode([('address', location)])
     url = '{}?{}'.format(geo_url, query)
@@ -29,7 +48,7 @@ def timeat(location):
     if loc_resp['status'] != 'OK':
         return
 
-    now = int(time())
+    now = current_time()
     for loc in loc_resp['results']:
         geo = loc['geometry']['location']
         query = urlencode([
