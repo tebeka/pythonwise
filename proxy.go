@@ -11,10 +11,6 @@ import (
 	"strings"
 )
 
-var (
-	target *url.URL // Proxied backend
-)
-
 // StripTransport strips headers from backend response
 type StripTransport struct {
 	http.RoundTripper
