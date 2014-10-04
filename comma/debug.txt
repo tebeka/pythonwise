@@ -1,0 +1,5 @@
+In [2]: len(colors)
+Out[2]: 3
+
+In [3]: print(colors)
+['red', 'green', 'blueyellow']
