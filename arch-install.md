@@ -1,5 +1,5 @@
 * cgdisk /dev/sda
-** I do one partition
+    * I do one partition
 * mkfs.ext4 /dev/sda1
 * mount /dev/sda1 /mnt
 * pacstrap -i /mnt base base-devel
@@ -14,14 +14,14 @@
 * hwclock --systohc --utc
 * echo HOSTNAME > /etc/hostname
 * vi /etc/hosts
-** 127.0.0.1	localhost.localdomain	localhost	myhostname
+    * 127.0.0.1	localhost.localdomain	localhost	myhostname
 * pacman -S networkmanager
 * systemctl enable NetworkManager
 * passwd
 * pacman -S gptfdisk syslinux
 * syslinux-install_update -i -a -m
 * vi /boot/syslinux/syslinux.cfg
-** sda3 -> sda1
+    * Change `sda3` to `sda1`
 * exit
 * umount -R /mnt
 * shutdown -h now
