@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <title>Highest Frequency Words in Alice</title>
+        <link rel="stylesheet" type="text/css"
+        href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/start/jquery-ui.css">
+
+        <style>
+            #slider {
+                height: 10px;
+            }
+            #chart {
+                width: 1000px;
+                height: 600px;
+            }
+            body {
+                width: 1000px;
+                margin-left: 100px;
+            }
+            #legend {
+                font-size: 2em;
+                font-family: monospace;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <b>Highest Frequency Words in Alice</b>
+            Showing <span id="ntop"></span> highest frequecy words (use slider to adjust)
+                <div id="slider" class="ui-silder ui-silder-horizontal ui-widget"></div>
+        </div>
+
+        <div id="chart"></div>
+        <div id="legend"></div>
+    </body>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
+    </script>
+    <script src="jquery.flot.min.js"></script>
+    <script src="jquery.flot.pie.min.js"></script>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js">
+    </script>
+
+    <script src="data.js"></script>
+    <script>
+        /* Update "legend" when hovering on data */
+        function on_hover(event, pos, obj) {
+            if (!obj) {
+                return;
+            }
+            var percent = parseFloat(obj.series.percent).toFixed(2);
+            $("#legend").text(obj.series.label + ': ' + percent + '%');
+        }
+
+        /* Handle silde event */
+        function on_slide() {
+            /* Pick top X items */
+            var num_items = $('#slider').slider('value');
+            $('#ntop').text(num_items);
+            var items = data.slice(0,  num_items-1);
+
+            /* Calculate rest of items */
+            var other = 0;
+            for (var i = num_items; i < data.length; i++) {
+                other += data[i].data;
+            }
+            /* Add rest-of-words to array */
+            items.unshift({label: 'rest of words', data: other});
+
+            $.plot($("#chart"), items,
+            {
+                series: {
+                    pie: {
+                        show: true
+                    }
+                },
+                legend: {
+                    position: 'ne'
+                },
+                grid: {
+                    hoverable: true,
+                }
+            });
+            $("#chart").bind("plothover", on_hover);
+        }
+
+        function on_ready() {
+            /* Set slider */
+            $('#slider').slider({
+                max: 100,
+                value: 10,
+                min: 1,
+                slide: on_slide,
+            });
+            /* Initial draw */
+            on_slide();
+        }
+
+        $(on_ready);
+
+    </script>
+</html>
+

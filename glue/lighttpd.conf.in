@@ -1,0 +1,23 @@
+server.modules = (
+    "mod_cgi"
+)
+
+server.document-root = "_PWD_"
+server.pid-file = "_PWD_/lighttpd.pid"
+static-file.exclude-extensions = ( ".cgi" )
+index-file.names = ( "index.html" )
+server.port = 9999
+cgi.assign = ( ".cgi"  => "" )
+
+# mimetype mapping
+mimetype.assign  = (
+  ".gif"          =>      "image/gif",
+  ".jpg"          =>      "image/jpeg",
+  ".jpeg"         =>      "image/jpeg",
+  ".png"          =>      "image/png",
+  ".css"          =>      "text/css",
+  ".html"         =>      "text/html",
+  ".htm"          =>      "text/html",
+  ".js"           =>      "text/javascript",
+  ""              =>      "text/plain"
+)

@@ -1,0 +1,73 @@
+#!/usr/bin/env python
+'''Find under which SCM directory is'''
+
+
+from os import sep
+from os.path import join, isdir, abspath
+
+import sys
+if sys.version_info[:2] >= (3, 0):
+    imap, ifilter = map, filter
+else:
+    from itertools import ifilter, imap
+
+
+def updirs(path):
+    parts = path.split(sep)
+    if not parts[0]:
+        parts[0] = sep  # FIXME: Windows
+
+    while parts:
+        yield join(*parts)
+        parts.pop()
+
+
+def scmdirs(path, scms):
+    for scmext in scms:
+        yield join(path, scmext)
+
+
+def scm(dirname):
+    return dirname[-3:].lower()
+
+
+def scms(path, scms):
+    return imap(scm, ifilter(isdir, scmdirs(path, scms)))
+
+
+def whichscm(path):
+    path = abspath(path)
+
+    for scm in scms(path, ('.svn', 'CVS')):
+        return scm
+
+    for dirname in updirs(path):
+        for scm in scms(dirname, ('.hg', '.git', '.bzr')):
+            return scm
+
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+
+    parser = OptionParser('usage: %prog [DIRNAME]')
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) not in (0, 1):
+        parser.error('wrong number of arguments')  # Will exit
+
+    dirname = args[0] if args else '.'
+    if not isdir(dirname):
+        raise SystemExit('error: {} is not a directory'.format(dirname))
+
+    scm = whichscm(dirname)
+    if not scm:
+        raise SystemExit('error: cannot find scm for {}'.format(dirname))
+
+    print(scm)
+
+if __name__ == '__main__':
+    main()

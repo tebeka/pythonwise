@@ -1,0 +1,40 @@
+#!/bin/bash
+
+# Decrypt a file encrypted with gpg
+
+
+# Check command line
+if [ $# -lt 1 ]; then
+	echo "usage: `basename $0` FILE[s]"
+	exit 1
+fi
+
+err=0
+for file in $@
+do
+	if [ ! -f $file ]; then
+		echo "$file: Not found"
+		err=1
+		continue
+	fi
+
+	# Output to current directory
+	bfile=`basename $file`
+    ext=`echo $file | sed -e 's/.*\.\([!.]*\)/\1/'`
+    if [ "$ext" != "gpg" ] && [ "$ext" != "pgp" ]; then
+		echo "Cowardly refusing to decrypt a file without gpg/pgp extension"
+        err=1
+        continue
+	fi
+
+	outfile=${bfile%.$ext}
+
+    echo $file '->' $outfile
+	gpg -d -o $outfile $file
+	if [ $? -ne 0 ]; then
+        echo "error decrypting $file"
+        err=1
+	fi
+done
+
+exit $err

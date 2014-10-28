@@ -1,0 +1,5 @@
+#!/bin/bash
+# How many checking I did today?
+# Without arguments will default to current directory
+
+svn log -r"{`date +%Y%m%d`}:HEAD" $1 | grep "| $USER |" | wc -l

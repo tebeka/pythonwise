@@ -1,0 +1,9 @@
+#!/bin/bash
+# Show binary representation of a number
+
+if [ $# -ne 1 ]; then
+    echo "usage: `basename $0` NUMBER" 1>&2
+    exit 1
+fi
+
+echo "obase=2; $1" | bc -l

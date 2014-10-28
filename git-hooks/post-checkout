@@ -1,0 +1,8 @@
+#!/bin/bash
+# Update tags when checking out/pulling
+
+# Create a symlink for this file with the name of "post-merge" as well
+#   cd .git/hooks && ln -s post-checkout post-merge
+
+cd $(dirname $(git rev-parse --git-dir))
+ctags -R

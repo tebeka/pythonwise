@@ -1,0 +1,21 @@
+#!/bin/bash
+# Close a branch in mercurial
+
+case $1 in
+    -h | --help ) echo "usage: $(basename $0) BRANCH_TO_CLOSE [COMMENT]"; exit;;
+esac
+
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "error: wrong number of arguments" 1>&2
+    exit 1
+fi
+
+
+comment=${2-Closing $1}
+
+# Exit on first error
+set -e
+current=$(hg branch)
+hg co -q -C $1
+hg ci --close-branch -m "${comment}"
+hg co -q -C $current

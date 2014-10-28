@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+'''Find python module version'''
+
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
+
+def valueof(v):
+    if callable(v):
+        try:
+            return v()
+        except Exception:
+            return None
+    return v
+
+def load_module(module_name):
+    module = __import__(module_name)
+
+    # __import__("a.b") will give us a
+    if ("." in module_name):
+        names = module_name.split(".")[1:]
+        while names:
+            name = names.pop(0)
+            module = getattr(module, name)
+
+    return module
+
+def find_module_version(module_name):
+    module = load_module(module_name)
+    attrs = set(dir(module))
+
+    for known in ("__version__", "version", "version_string"):
+        if known in attrs:
+            v = valueof(getattr(module, known))
+            if v:
+                return v
+
+    for attr in attrs:
+        if "version" in attr.lower():
+            v = getattr(module, attr)
+            if not v:
+                continue
+            v = valueof(v)
+            if v:
+                return v
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+
+    parser = OptionParser("usage: %prog MODULE_NAME")
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) != 1:
+        parser.error("wrong number of arguments") # Will exit
+
+    module_name = args[0]
+
+    try:
+        version = find_module_version(module_name)
+    except ImportError, e:
+        raise SystemExit("error: can't import %s (%s)" % (module_name, e))
+
+    if version:
+        print version
+    else:
+        raise SystemExit("error: can't find version for %s" % module_name)
+
+if __name__ == "__main__":
+    main()
+

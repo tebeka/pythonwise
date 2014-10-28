@@ -1,0 +1,50 @@
+#!/bin/bash
+# Pyflakes pre commit hook
+
+# First commit ever, skip
+git rev-parse HEAD > /dev/null 2>&1
+if [ $? -ne 0 ]; then 
+    exit
+fi
+
+if [ "$(uname -s)" == "Darwin" ]; then
+    tmp=$(mktemp -t tmp)
+else
+    tmp=$(mktemp)
+fi
+out=/tmp/pyflakes.out
+
+error=0
+for filename in $(git diff --cached --name-only HEAD | egrep '\.py$');
+do
+    # Check that file exists, so we ignore deletes and renames
+    if [ ! -f $filename ]; then
+        continue
+    fi
+
+    echo "Checking $filename ..."
+
+    # Some magic to check the file in staging area and not the ones on disk
+    git show ":${filename}" > $tmp
+
+    if grep -q -P '\t' $tmp; then
+        echo "error: Found tabs"
+        error=1
+    fi
+
+    pyflakes $tmp 2>&1 > $out
+    ok=$?
+    sed "s/^${tmp//\//\\/}/${filename//\//\\/}/" $out
+
+    if [ $ok -ne 0 ]; then
+        error=1
+    fi
+done
+
+rm $tmp
+
+if [ $error -ne 0 ]; then
+    echo
+    echo "Aborting commit (use 'git commit --no-verify' to bypass)"
+    exit 1
+fi

@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Encrypt input using gnupg and shred it
+# THIS DELETES THE ORIGINAL FILE
+
+err=0
+for file in $@
+do
+    if [ $file != ${file/.gpg/} ]; then
+        echo "$file already encrypted"
+        continue
+    fi
+    if [ -d $file ]; then
+        fname=$file.tar.bz2
+        tar -cjf $fname $file
+        find $file -type f -exec shred -u {} \;
+        rm -r $file
+    elif [ -f $file ]; then
+        fname=$file
+    else
+        echo "ERROR: Unknown file type $file"
+        err=1
+        continue
+    fi
+
+    gpg -r miki -e $fname
+    if [ $? -ne 0 ]; then
+        echo "ERROR: can't encrypt"
+        err=1
+        continue
+    fi
+
+    shred -u $fname
+    if [ $? -ne 0 ]; then
+        echo "ERROR: can't shred"
+        err=1
+        continue
+    fi
+done
+
+exit $err

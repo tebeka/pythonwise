@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+'''Launch wikipedia page for today'''
+
+__author__ = "Miki Tebkea <miki@mikitebeka.com>"
+
+from time import strftime
+import webbrowser
+
+day = strftime("%d")
+# Change 06 -> 6
+if day.startswith("0"):
+    day = day[1]
+
+url = "http://en.wikipedia.org/wiki/" + strftime("%B") + "_" + day
+webbrowser.open(url)

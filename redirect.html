@@ -1,0 +1,18 @@
+<html>
+   <body>
+       <a href="http://pythonwise.blogspot.com"
+           onclick="jump(this, 1);">Pythonwise</a> knows.
+   </body>
+   <script src="jquery.js"></script>
+   <script>
+       function jump(url, value)
+       {
+           $.post("jump.cgi", {
+               url: url,
+               value: value
+           });
+
+           return true;
+       }
+   </script>
+</html>
