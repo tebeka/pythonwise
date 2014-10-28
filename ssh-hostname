@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 '''Resolve SSH hostname for alias in ~/.ssh/config'''
 
-from os.path import expanduser, isfile
+from os.path import expanduser
 
 
 def iter_cfg(fo):
@@ -37,14 +37,15 @@ def main(argv=None):
     args = parser.parse_args(argv[1:])
 
     cfg_file = expanduser('~/.ssh/config')
-    if not isfile(cfg_file):
-        raise SystemExit('error: {} not found'.format(cfg_file))
+    try:
+        fo = open(cfg_file)
+    except (IOError, OSError) as err:
+        raise SystemExit('error: {}'.format(err))
 
-    with open(cfg_file) as fo:
-        for record in iter_cfg(fo):
-            if record.get('host') == args.host:
-                print(record['hostname'])
-                raise SystemExit
+    for record in iter_cfg(fo):
+        if record.get('host') == args.host:
+            print(record['hostname'])
+            raise SystemExit
 
     raise SystemExit('error: {} not found in {}'.format(args.host, cfg_file))
 
