@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 '''Show streaming graph of stock.'''
 
-
+from jinja2 import Template
 from flask import Flask, jsonify
+from six.moves.urllib.request import urlopen
+from six.moves.urllib.parse import urlencode
 
 from collections import deque
 from threading import Thread
 from time import time, sleep
-from urllib import urlopen, urlencode
 import csv
+import codecs
 
-html = '''\
+html = Template('''\
 <!DOCTYPE html>
 <html>
   <head>
@@ -26,7 +28,7 @@ html = '''\
   </head>
   <body>
     <div class="container">
-    <h4>%(stock)s</h4>
+    <h4 class="label label-primary">{{ stock }}</h4>
     <div id="chart"></div>
   </body>
   <script
@@ -66,7 +68,7 @@ html = '''\
 
     </script>
 </html>
-'''
+''')
 
 app = Flask(__name__)
 stock = None
@@ -86,8 +88,9 @@ def gen_url(stock):
 
 def poll_data(stock):
     url = gen_url(stock)
+    decoder = codecs.getreader('utf-8')
     while True:
-        fo = urlopen(url)
+        fo = decoder(urlopen(url))
         for row in csv.reader(fo):
             # "Google Inc.","GOOG",547.04,543.00,540.77
             price = float(row[2])
@@ -98,7 +101,7 @@ def poll_data(stock):
 
 @app.route('/')
 def home():
-    return html % {'stock': stock}
+    return html.render(stock=stock)
 
 
 @app.route('/data')
