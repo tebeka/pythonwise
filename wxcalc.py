@@ -4,7 +4,7 @@
 from __future__ import division
 
 __author__ = 'Miki Tebeka <miki@mikitebeka.com>'
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 # Calculator GUI:
 
@@ -89,7 +89,7 @@ class Calculator(wx.Dialog):
 
 if __name__ == '__main__':
    # Run the application
-   app = wx.PySimpleApp()
+   app = wx.App(False)
    dlg = Calculator()
    dlg.ShowModal()
    dlg.Destroy()
