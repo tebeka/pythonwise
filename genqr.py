@@ -41,10 +41,12 @@ if __name__ == '__main__':
                         default='200x200')
     args = parser.parse_args()
 
-    img_data = gen_qr(args.data, args.size)
     try:
+        img_data = gen_qr(args.data, args.size)
         out = stdout if args.out == '-' else open(args.out, 'wb')
         out.write(img_data)
+    except ValueError as err:
+        raise SystemExit('error: {}'.format(err))
     except IOError as err:
         raise SystemExit(
             'error: cannot open {} for writing - {}'.format(args.out, err))
