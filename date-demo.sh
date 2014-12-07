@@ -10,6 +10,10 @@ $ date -Isec
 $ date -u
 Sun Dec  7 14:58:36 UTC 2014
 
+# Current date in different time zone
+$ TZ=US/Eastern date
+Sun Dec  7 09:59:08 EST 2014
+
 # Current date in custom format, see "date --help" for format options
 $ date +%Y-%m-%d
 2014-12-07
