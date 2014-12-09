@@ -1,0 +1,56 @@
+# Files
+zipfile
+filecmp
+gzip
+
+# Encoding
+base64
+uu
+binhex
+python encodings.rot_13
+json.tool
+mimify
+quopri
+
+# Humor
+this
+antigravity
+
+# Other
+calendar
+turtle
+webbrowser
+
+# Servers 
+SimpleHTTPServer
+CGIHTTPServer
+smtpd
+
+# Network Clients
+ftplib
+poplib
+nttpserver
+smtplib (localhost)
+telnetlib
+
+# System Info
+locale
+mimetypes
+platform
+
+# Python
+compileall
+dis
+pdb
+pydoc
+site
+sysconfig
+tabnanny
+tokenize
+
+# Profile
+cProfile
+profile
+timeit
+pstats
+trace
