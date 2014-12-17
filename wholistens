@@ -1,0 +1,62 @@
+#!/usr/bin/env python
+'''Find out who is listening on a port'''
+
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
+
+from os import popen
+from os.path import isdir
+import re
+
+is_int = re.compile("\d+").match
+
+def find_pid(port):
+    for line in popen("netstat -nlp 2>&1"):
+        match = re.search(":(%s)\\s+" % port, line)
+        if not match:
+            continue
+
+        pidname = line.split()[-1].strip()
+        return pidname.split("/")[0]
+
+    return None
+
+def find_cmdline(pid):
+    cmd = open("/proc/%s/cmdline" % pid, "rb").read()
+
+    return " ".join(cmd.split(chr(0)))
+
+def find_pwd(pid):
+    data = open("/proc/%s/environ" % pid, "rb").read()
+    for line in data.split(chr(0)):
+        if line.startswith("PWD"):
+            return line.split("=")[1]
+
+    return None
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+
+    parser = OptionParser("usage: %prog PORT")
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) != 1:
+        parser.error("wrong number of arguments") # Will exit
+
+    port = args[0]
+    pid = find_pid(port)
+    if not (pid and is_int(pid)):
+        raise SystemExit(
+            "error: can't find who listens on port %s"
+            " [try again with sudo?] " % port)
+
+    if not isdir("/proc/%s" % pid):
+        raise SystemExit("error: can't find information on pid %s" % pid)
+
+    pwd = find_pwd(pid) or "<unknown>"
+    print "%s (pid=%s, pwd=%s)" % (find_cmdline(pid), pid, pwd)
+
+if __name__ == "__main__":
+    main()

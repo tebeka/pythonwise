@@ -1,0 +1,44 @@
+#!/bin/bash
+# Show github URL for a given file
+
+if [ $# -ne 1 ]; then
+    echo "usage: $(basename $0) FILENAME"
+    exit 1
+fi
+
+if [ ! -e $1 ]; then
+    echo "error: can't find $1"
+    exit 1
+fi
+
+if [ -d $1 ]; then
+    cd $1
+    dest=.
+else
+    cd $(dirname $1)
+    dest=$(basename $1)
+fi
+
+url=$(git config remote.origin.url | cut -d: -f2)
+if [ $? -ne 0 ]; then
+    echo "error: can't get remote url"
+    exit 1
+fi
+url=${url/.git/}
+
+path=$(git ls-files --full-name $dest | head -1)
+if [ $? -ne 0 ]; then
+    echo "error: git does not know about $1"
+    exit 1
+fi
+
+branch=$(git branch --no-color 2>/dev/null | grep '^* ' | sed 's/* //')
+prefix="https://github.com/$url"
+if [ "$dest" == "." ]; then
+    path=$(dirname $path)
+    url="${prefix}/tree/${branch}/$path"
+else
+    url="${prefix}/blob/${branch}/$path"
+fi
+
+echo $url

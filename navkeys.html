@@ -1,0 +1,143 @@
+<html>
+    <head>
+        <title>Key Navigation Demo</title>
+        <style>
+            body {
+                margin-left: 20%;
+                margin-right: 20%;
+                border: 1px solid blue;
+                height: 40%;
+            }
+            table {
+                border-collapse: collapse;
+            }
+            tr.current {
+                background: aqua;
+            }
+            td {
+                padding-right: 20px;
+            }
+            #help {
+                position: absolute;
+                left: 30%;
+                top: 20%;
+                background: yellow;
+                opacity: 90%;
+                border: 2px dashed black;
+                font-size: 2em;
+                font-family: Monospace;
+                padding: 5px;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Key Navigation Demo</h2>
+        <h4>Press ? for help</h4>
+        <table id="items">
+            <thead>
+                <tr><th>Date</th><th>Item</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2/15/2012</td>
+                    <td>
+                        <a href="http://bit.ly/ADrmuY">
+                            Job Seeking Hacker Gets 30 Months In Prison</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2/15/2012</td>
+                    <td>
+                        <a href="http://bit.ly/Aw3Ubm">
+                            Air Guns Shake Up Earthquake Monitoring</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2/15/2012</td>
+                    <td>
+                        <a href="http://bit.ly/z8obLu">
+                            Half of Fortune 500s, US Agencies Still Infected With DNSChanger Trojan</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2/15/2012</td>
+                    <td>
+                        <a href="http://bit.ly/Awr82o">
+                            Ex-FCC Chair: Spectrum Plan "Single Worst Telecom Bill I've Seen"</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2/15/2012</td>
+                    <td>
+                        <a href="http://bit.ly/zaRO7B">
+                            iOS Vs. Android: Which Has the Crashiest Apps?</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Help, initially hidden -->
+        <div id="help">
+            k : Move row up <br />
+            j : Move row down <br />
+            o : Open item a new window <br />
+            ? : Toggle this help
+        </div>
+    </body>
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+    </script>
+    <script>
+        var nav_keys = {
+            question: 63, /* Toggle help */
+            j: 106, /* Down */
+            k: 107, /* Up */
+            o : 111 /* Open URL */
+        };
+
+        function is_nav_key(key) {
+            for (var name in nav_keys) {
+                if (nav_keys[name] == key) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function on_keypress(e) {
+            if (!is_nav_key(e.which)) {
+                return;
+            }
+
+            if (e.which == nav_keys.question) {
+                $('#help').toggle();
+            }
+
+            var tr = $('#items tr.current');
+            if (event.which == nav_keys.o) {
+                window.open(tr.find('a').attr('href'));
+                return;
+            }
+
+            var next = (event.which == nav_keys.j) ? tr.next() : tr.prev();
+            /* Last one, rollover */
+            if (next.length == 0) {
+                var loc = (event.which == nav_keys.j) ? 'first' : 'last';
+                next = $('#items tbody tr:' + loc);
+            }
+
+            $('#items tr').removeClass('current');
+            next.addClass('current');
+        }
+
+        function on_ready() {
+            $('#help').hide();
+            $('#items tbody tr:first').addClass('current');
+            $('body').keypress(on_keypress);
+            $('#items').focus();
+        }
+
+        $(document).ready(on_ready);
+    </script>
+</html>
+

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Make teamspeak work on Ubuntu (basically disable pulseaudio before launching)
+
+conf=$HOME/.pulse/client.conf
+backup="${conf}.bak"
+
+if [ -f "$conf" ]; then
+    mv "$conf" "$backup"
+fi
+echo "autospawn = no" > "$conf"
+pulseaudio --kill
+
+cleanup() {
+    rm "$conf"
+    if [ -f "$backup" ]; then
+        mv "$backup" "$conf"
+    fi
+    pulseaudio -D
+}
+
+cd /opt/TeamSpeak3-Client-linux_amd64/
+LD_LIBRARY_PATH=. ./ts3client_linux_amd64& 
+pid=$!
+trap "kill -9 $pid; cleanup" SIGINT SIGTERM
+wait $pid
+cleanup
+

@@ -1,0 +1,12 @@
+syntax: glob
+
+glue/lighttpd.conf
+glue/lighttpd.pid
+dynamic-static/charts/*.png
+dynamic-static/lighttpd.inc
+dynamic-static/lighttpd.pid
+macapp/HumbleCalc.*
+pandas-validation/points.h5
+venv
+go-asset/httpd
+go-asset/image.go

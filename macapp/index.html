@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>HumbleCalc</title>
+        <style>
+            #expr {
+                width: 40em;
+                font-family: Monospace;
+            }
+            #result {
+                font-family: Monospace;
+                width: 40em;
+            }
+        </style>
+    </head>
+    <body>
+        <h2><img src="humblecalc.ico">HumbleCalc</h2>
+        <input id="expr" /> =
+        <input id="result" DISABLED/>
+    </body>
+    <script src="jquery.js"></script>
+    <script>
+        function handle_result(data, textStatus) {
+            $('#result').val(data);
+        }
+
+        function on_change() {
+            var expr = $.trim($('#expr').val());
+            $.get('/eval', {expr: expr}, handle_result);
+        }
+
+        function on_unload() {
+            $.get('/quit');
+        }
+
+        function on_ready() {
+            $(window).bind('beforeunload', on_unload);
+            $('#expr').keyup(on_change);
+            $('#expr').focus();
+        }
+
+        $(document).ready(on_ready);
+    </script>
+</html>

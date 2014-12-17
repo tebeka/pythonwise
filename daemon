@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Little utility to wrap a sever application with daemon like properties
+# (detach from tty ...)
+
+# Add the following to your crontab
+# @reboot (cd /path/to/my/app && ./daemon start)
+
+pidfile=mycoolapp.pid
+
+start() {
+    stop
+    if [ -f nohup.out ]; then
+        mv nohup.out nohup.out.$(date +%Y%m%d%H%M%S)
+    fi
+    nohup python ./mycoolapp.py &
+    echo $! > $pidfile
+}
+
+stop() {
+    if [ ! -f $pidfile ]; then
+        return
+    fi
+
+    pid=$(cat $pidfile)
+    echo "killing $pid"
+    kill $pid
+    rm $pidfile
+}
+
+if [ $# -ne 1 ]; then
+    echo "usage: $(basename $0) start/stop/restart"
+    exit 1
+fi
+
+case $1 in
+    -h | --help ) echo "usage: $(basename $0) start/stop/restart"; exit;;
+    start|restart ) start;;
+    stop ) stop;;
+    * ) echo "error: unknown command - $1"; exit 1;;
+esac

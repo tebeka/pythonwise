@@ -1,0 +1,54 @@
+#!/usr/bin/env python
+'''Resolve SSH hostname for alias in ~/.ssh/config'''
+
+from os.path import expanduser
+
+
+def iter_cfg(fo):
+    '''Iterate over SSH configuraton file, yield each section as dict.
+
+    We assume a section is between two "Host" lines.
+    '''
+    record = {}
+    for line in fo:
+        line = line.strip()
+        if not line:
+            continue
+
+        if line.lower().startswith('host '):
+            if record:
+                yield record
+            record = {}
+        key, value = line.split(None, 1)
+        record[key.lower()] = value
+
+    if record:
+        yield record
+
+
+def main(argv=None):
+    import sys
+    from argparse import ArgumentParser
+
+    argv = argv or sys.argv
+
+    parser = ArgumentParser(description=__doc__)
+    parser.add_argument('host', help='host to resolve')
+    args = parser.parse_args(argv[1:])
+
+    cfg_file = expanduser('~/.ssh/config')
+    try:
+        fo = open(cfg_file)
+    except (IOError, OSError) as err:
+        raise SystemExit('error: {}'.format(err))
+
+    for record in iter_cfg(fo):
+        if record.get('host') == args.host:
+            print(record['hostname'])
+            raise SystemExit
+
+    raise SystemExit('error: {} not found in {}'.format(args.host, cfg_file))
+
+
+if __name__ == '__main__':
+    main()

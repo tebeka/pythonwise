@@ -1,0 +1,24 @@
+#!/bin/bash
+# Quickly serve files over HTTP
+
+# Miki Tebeka <miki@mikitebeka.com>
+
+usage="usage: `basename $0` PATH [PORT]" 
+
+if [ $# -ne 1 ] && [ $# -ne 2 ]; then
+    echo $usage >&2
+    exit 1
+fi
+
+case $1 in 
+    "-h" | "-H" | "--help" ) echo $usage; exit;;
+    * ) path=$1; port=$2;;
+esac
+
+if [ ! -d $path ]; then
+    echo "error: $path is not a directory" >&2
+    exit 1
+fi
+
+cd $path
+python -m SimpleHTTPServer $port

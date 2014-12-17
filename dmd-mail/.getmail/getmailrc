@@ -1,0 +1,10 @@
+[retriever]
+type = SimplePOP3Retriever
+server = localhost
+port = 1110
+username = bugs.bunny
+password = whatsUPdoc
+
+[destination]
+type = Maildir
+path = ~/Mail/

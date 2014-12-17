@@ -1,0 +1,90 @@
+#!/usr/bin/env python
+
+from glob import glob
+from mimetypes import guess_type
+from itertools import count
+from os.path import splitext, dirname, basename, isdir
+from os import rename
+
+def is_image(filename):
+    type, encoding = guess_type(filename)
+    
+    return type and type.startswith("image/")
+
+def new_name(next, filename, files):
+    dir, base = dirname(filename), basename(filename)
+    base, ext = splitext(base)
+    while 1:
+        i = next()
+        name = "%s/%s%s" % (dir, i, ext)
+        if name not in files:
+            return name
+
+def rename_files(dirname, log):
+    files = set((f for f in glob("%s/*" % dirname) if is_image(f)))
+    if not files:
+        raise ValueError("Can't find image files in %s" % dirname)
+
+    next = count(1).next
+    old = files.copy()
+    for filename in old:
+        new = new_name(next, filename, files)
+        log("%s --> %s" % (filename, new))
+        rename(filename, new)
+        files.add(new)
+
+    log("Done - %d files renamed" % len(old))
+
+if __name__ == "__main__":
+    import Tkinter as tk
+    from tkFileDialog import askdirectory
+    from tkMessageBox import showerror
+
+    root = tk.Tk()
+    root.title("Rename Images For Sharon")
+    f = tk.Frame(root)
+    tk.Label(f, text="Directory:").pack(side=tk.LEFT)
+    direntry = tk.Entry(f, width=40)
+    direntry.pack(side=tk.LEFT, fill=tk.X, expand=1)
+    
+    def getdir():
+        name = askdirectory()
+        if not name:
+            return
+        direntry.delete(0, tk.END)
+        direntry.insert(0, name)
+    tk.Button(f, text="...", command=getdir).pack(side=tk.LEFT)
+    f.pack(fill=tk.X)
+    f = tk.Frame(root)
+    go = tk.Button(f, text="Rename")
+    go.pack(side=tk.LEFT)
+    tk.Button(f, text="Quit", command=root.quit).pack(side=tk.LEFT)
+    f.pack(anchor=tk.W)
+    tk.Label(root, text="Log:").pack()
+    f = tk.Frame(root)
+    scroll = tk.Scrollbar(f)
+    scroll.pack(side=tk.RIGHT, fill=tk.Y)
+    log = tk.Text(f, font="Monospace", yscrollcommand=scroll.set)
+    log.pack(fill=tk.BOTH, expand=1, side=tk.LEFT)
+    f.pack(fill=tk.BOTH)
+
+
+    def logfn(message):
+        log.insert(tk.END, message + "\n")
+
+    def gocmd():
+        path = direntry.get().strip()
+        if not isdir(path):
+            showerror("Directory Not Found",
+                      "ERROR: No such directory - %s" % path)
+            return
+
+        try:
+            rename_files(path, logfn)
+        except ValueError, e:
+            showerror("Error Renaming", "ERROR: %s" % e)
+
+    go["command"] = gocmd
+
+    direntry.focus()
+    root.mainloop()

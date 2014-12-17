@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+'''View attachment with right application'''
+
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
+
+from os import popen, system
+from os.path import isfile
+import re
+
+class ViewError(Exception):
+   pass
+
+def view_attachment(data):
+    # In the .destop file, the file name is %u or %U
+    u_sub = re.compile("%u", re.I).sub
+
+    FILENAME = "/tmp/attview"
+    fo = open(FILENAME, "wb")
+    fo.write(data)
+    fo.close()
+
+    mime_type = popen("file -ib %s" % FILENAME).read().strip()
+    if ";" in mime_type:
+        mime_type = mime_type[:mime_type.find(";")]
+    if mime_type == "application/x-not-regular-file":
+        raise ViewError("can't guess mime type")
+
+    APPS_DIR = "/usr/share/applications"
+    for line in open("%s/defaults.list" % APPS_DIR):
+        if line.startswith(mime_type):
+            mime, appfile = line.strip().split("=")
+            break
+    else:
+        raise ViewError("can't find how to open %s" % mime_type)
+
+    appfile = "%s/%s" % (APPS_DIR, appfile)
+    if not isfile(appfile):
+        raise ViewError("can't find %s" % appfile)
+    for line in open(appfile):
+        line = line.strip()
+        if line.startswith("Exec"):
+            key, cmd = line.split("=")
+            fullcmd = u_sub(FILENAME, cmd)
+            if fullcmd == cmd:
+                fullcmd += " %s" % FILENAME
+            system(fullcmd + "&")
+            break
+    else:
+        raise ViewError("can't find Exec in %s" % appfile)
+
+
+def main(argv=None):
+    from sys import stdin
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+
+    parser = OptionParser("usage: %prog [FILENAME]")
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) not in (0, 1):
+        parser.error("wrong number of arguments") # Will exit
+
+    filename = args[0] if args else "-"
+
+    if filename == "-":
+        data = stdin.read()
+    else:
+        try:
+            data = open(filename, "rb").read()
+        except IOError, e:
+            raise SystemExit("error: %s" % e.strerror)
+
+    try:
+        view_attachment(data)
+    except ViewError, e:
+        raise SystemExit("error: %s" % e)
+
+if __name__ == "__main__":
+    main()

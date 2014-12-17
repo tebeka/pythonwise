@@ -1,0 +1,41 @@
+#!/bin/bash
+# Open a file from command line, multi OS
+
+# Miki Tebeka <miki@mikitebeka.com>
+
+if [ $# -ne 1 ]; then
+    echo "usage: `basename $0` PATH"
+    exit 1
+fi
+
+# Taken from http://pypi.python.org/pypi/desktop/0.3
+linux_open()
+{
+    if [ -n "$GNOME_DESKTOP_SESSION_ID" ]; then
+        if which gvfs-open > /dev/null; then
+            echo "gvfs-open"
+        else
+            echo "gnome-open"
+        fi
+    elif [ -n "$KDE_FULL_SESSION" ]; then
+        echo "kfmclient exec"
+    elif xprop -root _DT_SAVE_MODE 2>&1 | grep -iq xfce; then
+        echo "exo-open"
+    else
+        echo ""
+    fi
+}
+
+case `uname` in
+    Linux) open=`linux_open`;;
+    Darwin) open=open;;
+    CYGWIN*) open=cygstart;;
+    MINGW*) open=start;;
+esac
+
+if [ -z "$open" ]; then
+    echo "error: no start program for `uname` platform" 1>&2
+    exit 1
+fi
+
+$open "$1" > /dev/null 2>&1

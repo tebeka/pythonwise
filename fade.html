@@ -1,0 +1,39 @@
+<html>
+    <body>
+    </body>
+    <script>
+        function set_color(elem) {
+            var colorstr = elem.fade_color.toString(16).toUpperCase();
+            /* Pad to 6 digits */
+            while (colorstr.length < 6) {
+                colorstr = "0" + colorstr;
+            }
+            elem.style.background = "#" + colorstr;
+        }
+
+        function fade(elem, color) {
+            if (typeof(color) != "undefined") {
+                elem.fade_color = color;
+            }
+            else {
+                elem.fade_color += 0x001111;
+            }
+            set_color(elem);
+
+            if (elem.fade_color < 0xFFFFFF) {
+                setTimeout(function() { fade(elem); }, 200);
+            }
+        }
+
+        function initialize()
+        {
+            var div = document.createElement("div");
+            div.innerHTML = "I'm Fading";
+
+            document.body.appendChild(div);
+            fade(div, 0xFF0000); /* Red */
+        }
+
+        window.onload = initialize;
+    </script>
+</html>

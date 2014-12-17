@@ -1,0 +1,30 @@
+#!/bin/bash
+# Extract audio from video files
+# Uses ffmpeg and lame
+
+# Miki Tebeka <miki@mikitebeka.com>
+
+if [ $# -ne 2 ]; then
+    echo "usage: `basename $0` INPUT_VIDEO OUTPUT_MP3"
+    exit 1
+fi
+
+infile=$1
+outfile=$2
+
+if [ ! -f $infile ]; then
+    echo "error: can't find $infile"
+    exit 1
+fi
+
+if [ -f $outfile ]; then
+    echo "error: $outfile exists"
+    exit 1
+fi
+
+fifoname=/tmp/encode.$$
+mkfifo $fifoname
+mplayer -vc null -vo null -ao pcm:fast -ao pcm:file=$fifoname $1&
+lame $fifoname $outfile
+rm $fifoname
+

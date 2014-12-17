@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Trends</title>
+        <link rel="stylesheet" href="trends.css" />
+        <style>
+            body {
+                font-family: Serif, Helvetica;
+            }
+
+            table {
+                width: 100%;
+                border: 2px solid gray;
+            }
+
+            td {
+                vertical-align: top;
+                border-bottom: 1px solid black;
+            }
+
+            h1 {
+                text-align: center;
+                font-variant: small-caps;
+            }
+
+            a {
+                text-decoration: none;
+                color: black;
+            }
+
+            a:hover {
+                background: silver;
+            }
+
+            ul {
+                margin: 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Trends</h1>
+        <div id="trends">
+            Loading ...
+        </div>
+    </body>
+    <script src="jquery.js"></script>
+    <script>
+        function load() {
+            $('#trends').load('/trends');
+        }
+        $(document).ready(function() {
+            load();
+            setInterval(load, 30 * 1000);
+        });
+    </script>
+</html>

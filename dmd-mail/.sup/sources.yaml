@@ -1,0 +1,14 @@
+---
+- !supmua.org,2006-10-01/Redwood/Maildir
+  uri: maildir:///Users/bugsbunny/Mail
+  usual: true
+  archived: false
+  id: 1
+  labels: []
+- !supmua.org,2006-10-01/Redwood/MBox
+  uri: mbox:///var/mail/bugsbunny
+  usual: true
+  archived: false
+  id: 2
+  labels: []
+- !supmua.org,2006-10-01/Redwood/SentLoader {}

@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+'''Clean your IMAP inbox
+
+Copy all message to "Archive" and delete them from Inbox
+'''
+
+__author__ = "Miki Tebeka <miki@mikitebeka.com>"
+
+from imaplib import IMAP4
+import logging as log
+
+def move_messages(server, user, passwd, purge=0):
+    imap = IMAP4(server)
+    imap.login(user, passwd)
+    imap.select()
+    messages = imap.search(None, "ALL")[1][0].split()
+    for msg_id in messages:
+        flags = imap.fetch(msg_id, "(FLAGS)")[1][0]
+        if not flags.startswith(msg_id):
+            log.error("bad reply for %s flags - %s" % (msg_id, flags))
+            continue
+        if "Deleted" in flags:
+            log.info("skipping %s - already deleted" % msg_id)
+            continue
+        log.info("deleting %s" % msg_id)
+        imap.copy(msg_id, "Archive")
+        imap.store(msg_id, "+FLAGS", "\\Deleted")
+
+    if purge:
+        log.info("purging deleted messages")
+        imap.expunge()
+    log.info("logging out")
+    imap.close()
+    imap.logout()
+
+def main(argv=None):
+    if argv is None:
+        import sys
+        argv = sys.argv
+
+    from optparse import OptionParser
+    from getpass import getpass, getuser
+
+    parser = OptionParser("usage: %prog")
+    parser.add_option("-p", "--purge", help="purge deleted messages",
+        action="store_true", default=0, dest="purge")
+    parser.add_option("-v", "--verbose", help="be verbose",
+                      dest="verbose", action="store_true", default=0)
+    parser.add_option("--server", help="imap server",
+            default="localhost", dest="server")
+    parser.add_option("--user", help="IMAP user name",
+            dest="user", default="")
+    parser.add_option("--passwd", help="IMAP password",
+            dest="passwd", default="")
+
+    opts, args = parser.parse_args(argv[1:])
+    if args:
+        parser.error("wrong number of arguments") # Will exit
+
+    level = log.DEBUG if opts.verbose else log.ERROR
+    log.basicConfig(format="%(levelname)s: %(message)s",
+                        level=level)
+
+    opts.user = opts.user or getuser()
+    opts.passwd = opts.passwd or getpass()
+
+    try:
+        move_messages(opts.server, opts.user, opts.passwd, opts.purge)
+    except Exception, e:
+        if opts.verbose:
+            log.exception(e)
+        else:
+            log.error(e)
+        raise SystemExit(1)
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Indent C files according to http://www.python.org/dev/peps/pep-0007/
+# Miki Tebeka <miki@mikitebeka.com>
+
+indent -cli4 -npcs -l78 -bad -bap -br -ce -nbc -di1 -psl -i4 -brs -lp -cdw -ut -ts4 $@

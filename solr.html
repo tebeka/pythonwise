@@ -1,0 +1,51 @@
+<html>
+    <head>
+        <title>Solr Search</title>
+    </head>
+    <body>
+        <h3>Solr Search</h3>
+
+        Query: <input id="query" /> 
+        <button id="search">Search</button>
+        <hr />
+        <div id="results">
+        </div>
+    </body>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script>
+        function on_data(data) {
+            $('#results').empty();
+
+            var docs = data.response.docs;
+            $.each(docs, function(i, item) {
+                $('#results').prepend($('<div>' + item.name + '</div>'));
+            });
+
+            var total = 'Found ' + docs.length + ' results';
+            $('#results').prepend('<div>' + total + '</div>');
+        }
+
+        function on_search() {
+            var query = $('#query').val();
+            if (query.length == 0) {
+                return;
+            }
+
+            var url='http://localhost:8983/solr/select/?wt=json&json.wrf=?&' +
+                    'q=' + query;
+            $.getJSON(url, on_data);
+        }
+
+        function on_ready() {
+            $('#search').click(on_search);
+            /* Hook enter to search */
+            $('body').keypress(function(e) {
+                if (e.keyCode == '13') {
+                    on_search();
+                }
+            });
+        }
+
+        $(document).ready(on_ready);
+    </script>
+</html>

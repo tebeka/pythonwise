@@ -1,0 +1,61 @@
+#!/usr/bin/env python
+'''Convert seconds since epoch to human readable time format.
+   Useful in cases where logs dump time information in epoch.
+
+    $ echo 1255099899 | strftime
+    10/09/2009 07:51
+    $
+'''
+
+from time import strftime, localtime
+import re
+
+def main(argv=None):
+    import sys
+    from optparse import OptionParser
+
+    argv = argv or sys.argv
+
+    default_format = "%m/%d/%Y %H:%M"
+    parser = OptionParser("%prog [options] [FILENAME]")
+    parser.add_option("--format", dest="format",
+        help="time format [%s]" % default_format, default=default_format)
+    parser.add_option("--doc", help="show strftime documentation",
+        dest="doc", action="store_true", default=0)
+    parser.add_option("--quote", help="quote result (e.g. '10/2/2009')",
+        dest="quote", default="")
+
+    opts, args = parser.parse_args(argv[1:])
+    if len(args) not in (0, 1):
+        parser.error("wrong number of arguments") # Will exit
+
+    if opts.doc:
+        import webbrowser
+        url = "http://docs.python.org/library/time.html#time.strftime"
+        webbrowser.open(url)
+        raise SystemExit
+
+    infile = args[0] if args else "-"
+    if infile == "-":
+        info = sys.stdin
+    else:
+        try:
+            info = open(infile)
+        except IOError, e:
+            raise SystemExit("error: can't open %s - %s" % (infile, e))
+
+    def callback(match):
+        t = localtime(float(match.group()))
+        human = strftime(opts.format, t)
+        if opts.quote:
+            human = human.replace(opts.quote, r"\\%s" % opts.quote)
+            human = opts.quote + human + opts.quote
+
+        return human
+
+    # We assume 1XXXXXXXXX (2001 +) dates, so we won't convert *everything*
+    print re.sub("1\d{9}(\.\d+)?", callback, info.read())
+
+
+if __name__ == "__main__":
+    main()
