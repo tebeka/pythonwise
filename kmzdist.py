@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-'''
-'''
+'''Calculate distance of path in .kmz file in Km'''
 
 from collections import namedtuple
 from math import sqrt, sin, cos, atan2, radians
@@ -71,8 +70,7 @@ if __name__ == '__main__':
     from argparse import ArgumentParser
     from sys import stdin
 
-    parser = ArgumentParser(
-        description='calculate length of path in .kmz file')
+    parser = ArgumentParser(description=__doc__)
     parser.add_argument('kmz', help='kmz file name', default='-', nargs='?')
     args = parser.parse_args()
 
