@@ -1,15 +1,16 @@
 #!/usr/bin/env python
-
+# encoding: utf-8
 '''
 '''
 
 from collections import namedtuple
-from math import sqrt
+from math import sqrt, sin, cos, atan2, radians
 from zipfile import ZipFile, BadZipfile
 import xml.etree.ElementTree as et
 
 namespaces = {'gx': 'http://www.google.com/kml/ext/2.2'}
 Coord = namedtuple('Coord', ['lat', 'lng'])
+R = 6371  # Earth radium in km
 
 
 def elem2coord(elem):
@@ -18,14 +19,35 @@ def elem2coord(elem):
     return Coord(lat, lng)
 
 
-def dist(coord1, coord2):
-    # FIXME: This is totally wrong.
-    # See distance calculation at
-    # http://www.movable-type.co.uk/scripts/latlong.html
-    dlat = coord1.lat - coord2.lat
-    dlng = coord1.lng - coord2.lng
+def sin2(x):
+    '''sin²(x)'''
+    v = sin(x)
+    return v * v
 
-    return sqrt(dlat*dlat + dlng*dlng)
+
+def dist(coord1, coord2):
+    '''Distance between two coordinates
+
+        This uses the ‘haversine’ formula to calculate the great-circle
+        distance between two points – that is, the shortest distance over the
+        earth’s surface – giving an ‘as-the-crow-flies’ distance between the
+        points (ignoring any hills they fly over, of course!).
+
+        Haversine formula:
+            a = sin²(Δφ/2) + cos φ1 ⋅ cos φ2 ⋅ sin²(Δλ/2)
+            c = 2 ⋅ atan2( √a, √(1−a) )
+            d = R ⋅ c
+        where	φ is latitude, λ is longitude, R is earth’s radius (mean radius
+        = 6,371km);
+
+      via http://www.movable-type.co.uk/scripts/latlong.html
+    '''
+    lat1, lng1 = radians(coord1.lat), radians(coord1.lng)
+    lat2, lng2 = radians(coord2.lat), radians(coord2.lng)
+
+    a = sin2(abs(lat1 - lat2)) + cos(lat1) * cos(lat2) * sin(abs(lng1 - lng2))
+    c = 2 * atan2(sqrt(a), sqrt(1-a))
+    return R * c
 
 
 def kmz_dist(file):
