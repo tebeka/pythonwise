@@ -9,7 +9,7 @@ import xml.etree.ElementTree as et
 
 namespaces = {'gx': 'http://www.google.com/kml/ext/2.2'}
 Coord = namedtuple('Coord', ['lat', 'lng'])
-R = 6371  # Earth radium in km
+R = 6371  # Earth radius in km
 
 
 def elem2coord(elem):
