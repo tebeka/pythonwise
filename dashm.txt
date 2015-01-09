@@ -4,11 +4,11 @@ filecmp
 gzip
 
 # Encoding
+json.tool
 base64
 uu
-binhex
 python encodings.rot_13
-json.tool
+#binhex
 mimify
 quopri
 
@@ -54,3 +54,6 @@ profile
 timeit
 pstats
 trace
+
+idle
+
