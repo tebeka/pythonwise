@@ -1,0 +1,16 @@
+$ ./updated.py 8000 8001 8002
+$ supervisorctl status
+httpd-8000                       RUNNING   pid 31768, uptime 0:00:04
+httpd-8001                       RUNNING   pid 31767, uptime 0:00:04
+httpd-8002                       RUNNING   pid 31766, uptime 0:00:04
+$ ./updated.py 8000 8004 8002 # Remove 8001, add 8004
+httpd-8001: disappeared
+httpd-8004: available
+httpd-8001: stopped
+httpd-8001: removed process group
+httpd-8004: added process group
+$ supervisorctl status
+httpd-8000                       RUNNING   pid 31768, uptime 0:00:12
+httpd-8002                       RUNNING   pid 31766, uptime 0:00:12
+httpd-8004                       RUNNING   pid 31785, uptime 0:00:02
+$
