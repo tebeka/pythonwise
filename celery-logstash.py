@@ -65,14 +65,12 @@ def configure(logstash=None, logdir=None):
     logstash is a dictionary of {'host': ..., 'port: ...}
     logdir is path to where log files are stored.
     '''
-    global _logstash, _logdir
+    global _logdir
 
-    # Make sure we have host and port keys
-    if logstash and not (set(['host', 'port']) < set(logstash)):
-        msg = 'bad logstash (should be {"host": ..., "port": ...})'
-        raise ValueError('%s - %s' % (msg, logstash))
+    if not (logstash or logdir):
+        raise ValueError('you must specify at least logstash or logdir')
 
-    _logstash = logstash or _logstash
+    _logstash.update(logstash)
     _logdir = logdir or _logdir
     init_logdir(_logdir)  # We do it here so we'll fail close to the definition
 
