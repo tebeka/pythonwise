@@ -80,7 +80,7 @@ def init_logdir(logdir):
         makedirs(logdir)
 
 
-def new_jlogger(name):
+def new_logger(name):
     '''Return new logger which will log both to logstash and to file in JSON
     format.
 
