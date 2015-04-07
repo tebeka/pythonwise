@@ -1,6 +1,5 @@
-# Example Dockerfile for setting up Docker container with MiniConda[1] and an
-# example app
-# [1] http://conda.pydata.org/miniconda.html
+# Example Dockerfile for setting up Docker container with MiniConda and an
+# example app.
 
 FROM ubuntu:14.04
 MAINTAINER Miki Tebeka <miki@353solutions.com>
@@ -21,6 +20,7 @@ RUN conda install -y \
     flask \
     pillow
 
+# Setup application
 COPY imgsrv.py /
 ENTRYPOINT ["/miniconda/bin/python", "/imgsrv.py"]
 EXPOSE 8080
