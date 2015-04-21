@@ -35,12 +35,12 @@ data = '''
 
 # Convert str -> list of digits using "list"
 # Use np.array(iterable, dtype) to create array
-# Use list comprehension to create all vectors
+# Use list comprehension to create all arrays
 # Use np.vstack to create 2d array
 mat = np.vstack([
     np.array(list(data[i:i+13]), dtype=np.int)
     for i in range(len(data)-12)
 ])
 
-# Use prod for calculate product row wise, the print the max
+# Use prod on axis 1 to calculate product row wise, then print the max
 print(mat.prod(axis=1).max())
