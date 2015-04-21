@@ -34,9 +34,9 @@ data = '''
 
 
 # Convert str -> list of digits using "list"
-# Use np.array(iterable, dtype) to create vector
+# Use np.array(iterable, dtype) to create array
 # Use list comprehension to create all vectors
-# Use np.vstack to create one matrix
+# Use np.vstack to create 2d array
 mat = np.vstack([
     np.array(list(data[i:i+13]), dtype=np.int)
     for i in range(len(data)-12)
