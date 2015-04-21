@@ -33,13 +33,15 @@ data = '''
 '''.replace('\n', '')
 
 
-# Convert str -> list of digits using "list"
+# Convert str -> list of digits using list comprehension
+digits = [int(c) for c in data]
+
 # Use np.array(iterable, dtype) to create array
 # Use list comprehension to create all arrays
 # Use np.vstack to create 2d array
 mat = np.vstack([
-    np.array(list(data[i:i+13]), dtype=np.int)
-    for i in range(len(data)-12)
+    np.array(digits[i:i+13], dtype=np.int)
+    for i in range(len(digits)-12)
 ])
 
 # Use prod on axis 1 to calculate product row wise, then print the max
