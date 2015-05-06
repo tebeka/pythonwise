@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+    <title>jQuery/React Multi Component</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>jQuery/React Multi Demo</h1>
+      <div class="row">
+        <div class="col-md-4">
+          <div id="name"></div>
+        </div>
+        <div class="col-md-4">
+          <div id="type"></div>
+        </div>
+        <div class="col-md-4">
+          <select id="data">
+          </select>
+          <div class="alert alert-success">
+            Change values above to see them reflected in the boxes to the left.
+          </div>
+        </div>
+      </div> <!-- row -->
+    </div> <!-- container -->
+  </body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js">
+  </script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js">
+  </script>
+  <script src="https://fb.me/react-0.13.2.min.js"></script>
+  <script src="https://fb.me/JSXTransformer-0.13.2.js"></script>
+
+  <script type="text/jsx">
+    var observers = [];
+
+    var DataView = React.createClass({
+        render: function() {
+          return (
+            <div className="dataview alert alert-info">
+              <em>{this.props.datakey}:</em> {this.state.value}
+            </div>
+          );
+        },
+        getInitialState: function() {
+          return {value: ''};
+        },
+        componentDidMount: function() {
+          var obj = this; // Save reference to React object
+          observers.push(function(data) {
+            obj.setState({value: data[obj.props.datakey]});
+          });
+        }
+    });
+
+    var loons = [
+      {name: 'Daffy', type: 'Duck'},
+      {name: 'Bugs', type: 'Bunny'},
+      {name: 'Tweety', type: 'Bird'},
+      {name: 'Pepe', type: 'Skunk'}
+    ];
+    var valkey = 'val';
+
+    function on_data() {
+        var data = $('#data').find(':selected').data(valkey);
+        $.each(observers, function(i, fn) {
+            fn(data);
+        });
+    }
+    
+    function on_ready() {
+      React.render(
+          <DataView datakey="name" />,
+          $('#name')[0]
+      );
+      React.render(
+          <DataView datakey="type" />,
+          $('#type')[0]
+      );
+
+      $.each(loons, function(i, val) {
+            var opt = $('<option>').text(val.name).data(valkey, val);
+            $('#data').append(opt);
+          }
+      );
+      $('#data').change(on_data);
+      on_data(); /* Initial load */
+    }
+
+    $(document).ready(on_ready);
+  </script>
+</html>
+
