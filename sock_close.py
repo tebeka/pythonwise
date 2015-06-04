@@ -1,6 +1,7 @@
 """Using contextlib.closing to make sure sockets are closed"""
 
 from contextlib import closing
+from functools import partial
 from socket import socket
 from urlparse import urlparse
 
@@ -21,11 +22,7 @@ def get(url):
     with closing(sock):
         sock.connect((url.netloc, 80))
         sock.sendall(request)
-
-        def read():
-            return sock.recv(1024)
-
-        return ''.join(iter(read, ''))
+        return ''.join(iter(partial(sock.recv, 1024), ''))
 
 
 if __name__ == '__main__':
