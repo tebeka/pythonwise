@@ -3,7 +3,13 @@
 from contextlib import closing
 from functools import partial
 from socket import socket
-from urlparse import urlparse
+
+import sys
+
+if sys.version_info[:2] < (3, 0):
+    from urlparse import urlparse
+else:
+    from urllib.parse import urlparse
 
 request_template = '''\
 GET %s HTTP/1.1
@@ -21,8 +27,9 @@ def get(url):
     sock = socket()
     with closing(sock):
         sock.connect((url.netloc, 80))
-        sock.sendall(request)
-        return ''.join(iter(partial(sock.recv, 1024), ''))
+        sock.sendall(request.encode('utf-8'))
+        data = b''.join(iter(partial(sock.recv, 1024), b''))
+        return data.decode('utf-8')
 
 
 if __name__ == '__main__':
