@@ -29,8 +29,9 @@ def get(url):
         sock.connect((url.netloc, 80))
         sock.sendall(request.encode('utf-8'))
         data = b''.join(iter(partial(sock.recv, 1024), b''))
-        return data.decode('utf-8')
+        return data
 
 
 if __name__ == '__main__':
-    print(get('http://httpbin.org/ip'))
+    data = get('http://httpbin.org/ip')
+    print(data.decode('utf-8'))
