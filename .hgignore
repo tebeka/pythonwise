@@ -10,3 +10,4 @@ pandas-validation/points.h5
 venv
 go-asset/httpd
 go-asset/image.go
+withopen.png
