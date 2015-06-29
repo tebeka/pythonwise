@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """ "with open as X" frequency"""
 
 from os import walk
