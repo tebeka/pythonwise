@@ -8,6 +8,7 @@ import re
 import pandas as pd
 
 def py_files(start):
+    """Iterator return all Python files under 'start'"""
     for root, dirs, files in walk(start):
         for name in files:
             if not name.endswith('.py'):
@@ -16,6 +17,7 @@ def py_files(start):
 
 
 def py_lines(start):
+    """All lines from all Python files under start"""
     for path in py_files(start):
         with open(path, encoding='latin-1') as fo:
             yield from fo
@@ -36,7 +38,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     names = Counter()
-
     for line in py_lines('%s/Lib' % args.root):
         if 'with open' not in line:
             continue
