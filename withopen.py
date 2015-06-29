@@ -48,6 +48,7 @@ if __name__ == '__main__':
         names[match.group(1)] += 1
 
 
+    # Use reversed to get most common on top of chart
     name, count = zip(*reversed(names.most_common()))
     df = pd.DataFrame({
         'name': name,
