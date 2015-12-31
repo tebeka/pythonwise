@@ -1,0 +1,11 @@
+elastic:
+    image: elasticsearch
+
+haproxy:
+    image: haproxy
+    volumes:
+        - ${PWD}:/usr/local/etc/haproxy
+    links:
+        - elastic
+    ports:
+        - "9200:9200"
