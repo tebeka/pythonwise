@@ -1,0 +1,13 @@
+# Example test rule in makefile
+
+test:
+	# Clean .pyc
+	find . -name '*.py[co]' -exec rm {} \;
+	# Check for pdb calls
+	test -z "$(shell find . -name '*.py' -exec grep pdb.set_trace {} \;)"
+	flake8 .
+	PYTHONPATH=$(PWD) python2 -m py.test -v tests
+
+.PHONY: all run deploy update-data test
+
+# vim:ft=make
