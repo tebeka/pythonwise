@@ -1,7 +1,8 @@
 // "Manual" breapoing in go
 // Compile with
-//		go build -gcflags "-N -l" hard-bp.go
+//		go build -gcflags "-N -l" manual-bp.go
 // Then
+//      gdb manual-bp
 //		(gdb) run
 // When you hit breakpoint, call "fin" twice to get to the current location
 //		(gdb) fin
