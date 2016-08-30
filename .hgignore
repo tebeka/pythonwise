@@ -11,3 +11,4 @@ venv
 go-asset/httpd
 go-asset/image.go
 withopen.png
+hard-bp
