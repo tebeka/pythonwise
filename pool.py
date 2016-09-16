@@ -24,10 +24,11 @@ class Pool:
         for obj in objects:
             self._queue.put(obj)
 
-    def get(self):
-        """Get object from the pool, should be used as contect manger. e.g.:
+    def lease(self):
+        """Lease an object from the pool, should be used as contect manger.
+        e.g.:
 
-            with pool.get() as conn:
+            with pool.lease() as conn:
                 cur = conn.cursor()
                 cur.execute('SELECT ...')
         """
@@ -49,7 +50,7 @@ if __name__ == '__main__':
     def worker(n, barrier, pool):
         barrier.wait()  # Wait for all threads to be ready
         sleep(random() / 10)
-        with pool.get() as val:
+        with pool.lease() as val:
             print('worker %d got resource %d' % (n, val))
 
     for i in range(n):
