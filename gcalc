@@ -9,6 +9,7 @@ import json
 from urllib import urlopen
 import re
 
+
 def main(argv=None):
     import sys
     from optparse import OptionParser
@@ -18,7 +19,7 @@ def main(argv=None):
     parser = OptionParser("%prog FROM TO\n\t%prog 100f c")
     opts, args = parser.parse_args(argv[1:])
     if len(args) != 2:
-        parser.error("wrong number of arguments") # Will exit
+        parser.error("wrong number of arguments")  # Will exit
 
     url = "http://www.google.com/ig/calculator?q=%s=?%s" % tuple(args)
     try:
@@ -27,13 +28,14 @@ def main(argv=None):
         # Convert to valid JSON: {foo: "1"} -> {"foo" : "1"}
         result = re.sub("([a-z]+):", '"\\1" :', result)
         result = json.loads(result)
-    except (ValueError, IOError), e:
-        raise SystemExit("error: %s" % e)
+    except (ValueError, IOError) as err:
+        raise SystemExit("error: %s" % err)
 
     if result["error"]:
         raise SystemExit("error: %s" % result["error"])
 
-    print result["rhs"]
+    print(result["rhs"])
+
 
 if __name__ == "__main__":
     main()

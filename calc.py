@@ -7,15 +7,20 @@
 # http://www.gnu.org/copyleft/gpl.html for more details #
 # ======================================================#
 
-from __future__ import division # Detault to real devision
-from math import * # Get all math goodies in global namespace
-from optparse import OptionParser
+from __future__ import division  # Detault to real devision
+from math import * # Get all math goodies in global namespace # noqa
 
 description = 'Calculate math expression (e.g. calc \'7 * 29\' -> 203)'
 
+
 def show_gui(text=''):
-    import Tkinter as tk
-    from operator import isNumberType
+    import sys
+    if sys.version_info[:2] < (3, 0):
+        import Tkinter as tk
+    else:
+        import tkinter as tk
+
+    import numbers
 
     root = tk.Tk()
     root.title('The Humble Calc')
@@ -33,14 +38,15 @@ def show_gui(text=''):
         s = expr.get()
         try:
             ans = eval(expr.get())
-            if isNumberType(ans):
+            if isinstance(ans, numbers.Number):
                 answer['text'] = str(eval(s))
-        except Exception, e:
+        except Exception:
             answer['text'] = '???'
         root.after(100, poll)
 
     poll()
     root.mainloop()
+
 
 def main(argv=None):
     if argv is None:
@@ -49,12 +55,12 @@ def main(argv=None):
 
     from argparse import ArgumentParser
 
-
     parser = ArgumentParser(description=description)
-    parser.add_argument('expression', help='math expression', default='',
-                       nargs='?')
-    parser.add_argument('-g', '--gui', help='run in gui mode',
-        dest='gui', action='store_true', default=False)
+    parser.add_argument(
+        'expression', help='math expression', default='', nargs='?')
+    parser.add_argument(
+        '-g', '--gui', help='run in gui mode', dest='gui', action='store_true',
+        default=False)
 
     args = parser.parse_args(argv[1:])
 
@@ -67,6 +73,7 @@ def main(argv=None):
             print(eval(args.expression or '0'))
         except Exception as e:
             raise SystemExit('error: {0}'.format(e))
+
 
 if __name__ == '__main__':
     main()
