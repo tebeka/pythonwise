@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 """Run a flow of BigQuery queries.
 
-We assume the destination table has the same name as the SQL file containing
-the query (e.g. "users.sql" will populate the "users" table).
-
-The view functionality requires the "dot" utility (from graphviz).
-
-Scripts are assuming to use "standard" SQL format.
+Assumptions:
+* Destination table has the same name as the SQL file containing the query
+  (e.g. "users.sql" will populate the "users" table)
+* The view functionality requires the "dot" utility (from graphviz)
+* Scripts are using to use "standard" SQL format
 """
 
 from collections import defaultdict
