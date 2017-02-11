@@ -30,7 +30,10 @@ class SQLDir(dict):
 
 def example_usage():
     import sqlite3
-    sqld = SQLDir('/tmp/sql')
+    from os import path
+
+    here = path.dirname(path.realpath(__file__))
+    sqld = SQLDir(path.join(here, 'sql'))
 
     conn = sqlite3.connect(':memory:')
     if conn.execute(sqld.table_exists).fetchone() is None:
