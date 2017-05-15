@@ -1,3 +1,4 @@
+"""Timeiming mulitple column query in Pandas DataFrame"""
 from timeit import timeit
 import matplotlib.pyplot as plt
 import numpy as np
