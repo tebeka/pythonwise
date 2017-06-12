@@ -1,4 +1,4 @@
-// Benchmark conactination of slices using append vs using copy
+// Benchmark concatenation of slices using append vs using copy
 
 /* Results
 
@@ -27,7 +27,7 @@ var (
 	res = []int{1, 2, 3, 4, 5}
 )
 
-// concatAppend concatinates slices using built-in append
+// concatAppend concatenates slices using built-in append
 func concatAppend(slices ...[]int) []int {
 	var result []int
 	for _, slice := range slices {
