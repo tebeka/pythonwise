@@ -85,7 +85,7 @@ func TestConcatAppend(t *testing.T) {
 func TestConcatCopy(t *testing.T) {
 	out := concatCopy(x, y, z)
 	if !eq(out, res) {
-		t.Fatalf("concatAppend - got %v, expected %v\n", out, res)
+		t.Fatalf("concatCopy - got %v, expected %v\n", out, res)
 	}
 }
 
