@@ -36,7 +36,7 @@ func concatAppend(slices ...[]int) []int {
 	return result
 }
 
-// concatAppend concatinates slices using built-in copy
+// concatCopy concatinates slices using built-in copy
 func concatCopy(slices ...[]int) []int {
 	size := 0
 	for _, slice := range slices {
