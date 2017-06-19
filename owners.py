@@ -9,7 +9,7 @@ from subprocess import check_output, CalledProcessError
 
 
 def path_type(val):
-    """Check that val is an exisiting path"""
+    """Check that val is an existing path"""
     if not path.exists(val):
         raise ValueError('{!r} does not exists'.format(val))
     return val
@@ -50,6 +50,7 @@ for line in out.decode().splitlines():
     if len(last) < args.count and name not in last:
         # 'Tue, 6 Jun 2017 22:13:36 -0400'
         time = datetime.strptime(time, '%a, %d %b %Y %H:%M:%S %z')
+        # Convert to naive datetime so we can subtract
         time = (time - time.utcoffset()).replace(tzinfo=None)
         last.append('{} ({})'.format(name, dt2str(now-time)))
     commits[name] += 1
