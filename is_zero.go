@@ -9,10 +9,12 @@ import (
 // IsZero returns true if val is the zero value for it's type (e.g. 0, 0.0, "", ...)
 func IsZero(val interface{}) bool {
 	zero := reflect.Zero(reflect.TypeOf(val))
+	// We can't use == since it'll panic on maps, slices ...
 	return reflect.DeepEqual(zero.Interface(), reflect.ValueOf(val).Interface())
 }
 
 func main() {
+	// A little test
 	var m1 map[int]int
 	m2 := map[int]int{1: 2}
 
