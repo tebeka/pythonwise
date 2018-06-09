@@ -1,0 +1,13 @@
+#!/usr/bin/env python
+"""Print link to gist-it"""
+
+from argparse import ArgumentParser, FileType
+
+parser = ArgumentParser(description=__doc__)
+parser.add_argument('script', help='script name', type=FileType('r'))
+
+args = parser.parse_args()
+
+script = args.script.name
+gh_url = f'https://github.com/tebeka/pythonwise/blob/master/{script}'
+print(f'<script src="https://gist-it.appspot.com/{gh_url}"></script>')
