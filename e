@@ -3,10 +3,11 @@
 
 from subprocess import Popen
 from sys import argv
+from shlex import quote
 
 cmd = [
     'xfce4-terminal',
     '-T', 'nvim',
-    '-e', ' '.join(['nvim'] + argv[1:])
+    '-e', ' '.join(['nvim'] + [quote(arg) for arg in argv[1:]])
 ]
 Popen(cmd)
