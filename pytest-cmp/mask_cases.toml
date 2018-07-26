@@ -1,0 +1,38 @@
+[[mask_cases]]
+id = "passwd"
+in = """
+name: daffy
+passwd: t0ps3cr3t
+kind: duck
+"""
+out = """
+name: daffy
+passwd: XXXX
+kind: duck
+"""
+
+[[mask_cases]]
+id = "password"
+in = """
+name: daffy
+password: t0ps3cr3t
+kind: duck
+"""
+out = """
+name: daffy
+password: XXXX
+kind: duck
+"""
+
+[[mask_cases]]
+id = "no change"
+in = """
+name: daffy
+kind: duck
+color: black
+"""
+out = """
+name: daffy
+kind: duck
+color: black
+"""
