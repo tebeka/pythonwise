@@ -11,6 +11,7 @@ def iter_mask_cases():
     with open(f'{here}/mask_cases.toml') as fp:
         cfg = toml.load(fp)
         for case in cfg['mask_cases']:
+            # id sets the test name being printed out
             yield pytest.param(case['in'], case['out'], id=case['id'])
 
 
