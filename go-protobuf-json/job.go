@@ -1,3 +1,4 @@
+// Example of using Jobs
 package main
 
 import (
@@ -14,14 +15,16 @@ func main() {
 		Properties: make(map[string]*pb.Value),
 	}
 
-	/*
-		j1.Properties["retries"] = &pb.Value{
-			Value: &pb.Value_Int{Int: 3},
-		}
-		j1.Properties["target"] = &pb.Value{
-			Value: &pb.Value_Str{Str: "Metal Knight"},
-		}
+	/* Old way before we added SetProperty method
+
+	j1.Properties["retries"] = &pb.Value{
+		Value: &pb.Value_Int{Int: 3},
+	}
+	j1.Properties["target"] = &pb.Value{
+		Value: &pb.Value_Str{Str: "Metal Knight"},
+	}
 	*/
+
 	j1.SetProperty("retries", 3)
 	j1.SetProperty("target", "Metal Knight")
 
