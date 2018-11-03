@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-// SetProperty sets a property
+// SetProperty sets a Job property
 func (j *Job) SetProperty(key string, value interface{}) error {
 	v, err := ValueFromGo(value)
 	if err != nil {
@@ -18,20 +18,20 @@ func (j *Job) SetProperty(key string, value interface{}) error {
 }
 
 // ValueFromGo returns a new *Value for a native Go value
-func ValueFromGo(value interface{}) (*Value, error) {
-	var v isValue_Value
+func ValueFromGo(v interface{}) (*Value, error) {
+	var iv isValue_Value
 
-	switch value.(type) {
+	switch v.(type) {
 	case int, int8, int16, int32, int64:
 		// Hack to get Int value
-		v = &Value_Int{Int: reflect.ValueOf(value).Int()}
+		iv = &Value_Int{Int: reflect.ValueOf(v).Int()}
 	case string:
-		v = &Value_Str{Str: value.(string)}
+		iv = &Value_Str{Str: v.(string)}
 	default:
-		return nil, fmt.Errorf("unsupported type for Value - %T", value)
+		return nil, fmt.Errorf("unsupported type for Value - %T", v)
 	}
 
-	return &Value{Value: v}, nil
+	return &Value{Value: iv}, nil
 }
 
 // MarshalJSON marshal value as JSON object

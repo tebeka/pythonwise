@@ -25,18 +25,18 @@ func main() {
 	j1.SetProperty("retries", 3)
 	j1.SetProperty("target", "Metal Knight")
 
-	fmt.Println(j1)
+	fmt.Println("[j1] ", j1)
 
 	data, err := json.Marshal(j1)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(string(data))
+	fmt.Println("[json] ", string(data))
 
 	var j2 pb.Job
 	if err := json.Unmarshal(data, &j2); err != nil {
 		panic(err)
 	}
-	fmt.Println(j2)
+	fmt.Println("[j2] ", j2)
 }
