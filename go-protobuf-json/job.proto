@@ -1,0 +1,15 @@
+syntax = "proto3";
+package pb;
+
+message Value {
+    oneof value {
+	int64 int = 1;
+	string str = 2;
+    }
+}
+
+message Job {
+    string user = 1;
+    int64 count = 2;
+    map<string, Value> properties = 3;
+}
