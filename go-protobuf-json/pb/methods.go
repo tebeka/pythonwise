@@ -1,3 +1,5 @@
+// Utility methods for Job to make nice API and smooth integration with JSON
+
 package pb
 
 import (
@@ -35,6 +37,7 @@ func ValueFromGo(v interface{}) (*Value, error) {
 }
 
 // MarshalJSON marshal value as JSON object
+// (Implement json.Marshaler interface)
 func (v *Value) MarshalJSON() ([]byte, error) {
 	switch v.GetValue().(type) {
 	case *Value_Int:
@@ -47,6 +50,7 @@ func (v *Value) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON will unmarshal encoded native Go type to value
+// (Implement json.Unmarshaler interface)
 func (v *Value) UnmarshalJSON(data []byte) error {
 	var i interface{}
 	if err := json.Unmarshal(data, &i); err != nil {
