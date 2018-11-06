@@ -37,8 +37,8 @@ func main() {
 
 	fmt.Println("[json] ", string(data))
 
-	var j2 pb.Job
-	if err := json.Unmarshal(data, &j2); err != nil {
+	j2 := &pb.Job{}
+	if err := json.Unmarshal(data, j2); err != nil {
 		panic(err)
 	}
 	fmt.Println("[j2] ", j2)
