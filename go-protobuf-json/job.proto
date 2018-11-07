@@ -1,6 +1,7 @@
 syntax = "proto3";
 package pb;
 
+// A value of several possible types
 message Value {
     oneof value {
 	int64 int = 1;
@@ -8,6 +9,7 @@ message Value {
     }
 }
 
+// A job to execute
 message Job {
     string user = 1;
     int64 count = 2;
