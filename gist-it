@@ -2,12 +2,19 @@
 """Print link to gist-it"""
 
 from argparse import ArgumentParser, FileType
+from subprocess import check_output
+from os import path
 
 parser = ArgumentParser(description=__doc__)
 parser.add_argument('script', help='script name', type=FileType('r'))
 
 args = parser.parse_args()
 
-script = args.script.name
+root = check_output(['git', 'rev-parse', '--show-toplevel']).decode().strip()
+if root.endswith('/'):
+    root = root[:-1]
+
+script = path.abspath(args.script.name)
+script = script[len(root)+1:]
 gh_url = f'https://github.com/tebeka/pythonwise/blob/master/{script}'
 print(f'<script src="https://gist-it.appspot.com/{gh_url}"></script>')
