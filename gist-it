@@ -16,5 +16,6 @@ if root.endswith('/'):
 
 script = path.abspath(args.script.name)
 script = script[len(root)+1:]
-gh_url = f'https://github.com/tebeka/pythonwise/blob/master/{script}'
+# gh_url = f'https://github.com/tebeka/pythonwise/blob/master/{script}'
+gh_url = f'/github/tebeka/pythonwise/blob/master/{script}'
 print(f'<script src="https://gist-it.appspot.com/{gh_url}"></script>')
