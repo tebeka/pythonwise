@@ -12,7 +12,4 @@ def get_default(locs, name):
 
 
 def get_none(locs, name):
-    loc = locs.get(name)
-    if loc is None:
-        loc = Location(0, 0)
-    return loc
+    return locs.get(name) or Location(0, 0)
