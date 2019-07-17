@@ -31,7 +31,7 @@ def split_to_sentences(text):
     start = 0
 
     # We use finditer and not split since we want to keep the end
-    for match in re.finditer('(\s*[.!?]\s*)|(\n{2,})', text):
+    for match in re.finditer(r'(\s*[.!?]\s*)|(\n{2,})', text):
         sentences.append(text[start:match.end()].strip())
         start = match.end()
 
@@ -124,7 +124,8 @@ def main(argv=None):
     argv = argv or sys.argv
 
     parser = ArgumentParser(description='Summarize text')
-    parser.add_argument('file', nargs='?',
+    parser.add_argument(
+        'file', nargs='?',
         help='file to summarize (stdin will be used otherwise)')
     parser.add_argument('-s', '--size', help='Size of summary',
                         default=MAX_SUMMARY_SIZE, type=int)
