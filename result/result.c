@@ -1,4 +1,5 @@
 #include "result.h"
+
 #include <string.h>
 
 const char *result_str(result_t res) {

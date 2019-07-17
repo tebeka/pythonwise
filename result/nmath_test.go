@@ -31,5 +31,5 @@ func TestSqrtNeg(t *testing.T) {
 	if err == nil {
 		t.Fatalf("no error for negative number")
 	}
-	t.Logf("error: %s", err)
+	t.Logf("expected error: %s", err)
 }
