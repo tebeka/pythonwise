@@ -1,0 +1,221 @@
+{
+  "response": {
+    "status": 200
+  },
+  "symbol": {
+    "id": 686,
+    "symbol": "AAPL",
+    "title": "Apple Inc.",
+    "aliases": [],
+    "is_following": false,
+    "watchlist_count": 335830
+  },
+  "cursor": {
+    "more": true,
+    "since": 189068692,
+    "max": 189066312
+  },
+  "messages": [
+    {
+      "id": 189068692,
+      "body": "7 Monster Stock Market Predictions For The Week of January 6 https://mottcapitalmanagement.com/7-monster-stock-market-predictions-for-the-week-of-january-6/ $AAPL, $NFLX, $TSLA, $XOM, $SNAP,",
+      "created_at": "2020-01-05T20:22:00Z",
+      "user": {
+        "id": 945301,
+        "username": "Scorpio244",
+        "name": "Michael Kramer",
+        "avatar_url": "https://avatars.stocktwits.com/production/945301/thumb-1554139485.png",
+        "avatar_url_ssl": "https://avatars.stocktwits.com/production/945301/thumb-1554139485.png",
+        "join_date": "2017-02-04",
+        "official": true,
+        "identity": "Official",
+        "classification": [
+          "suggested",
+          "official"
+        ],
+        "followers": 17087,
+        "following": 100,
+        "ideas": 9324,
+        "watchlist_stocks_count": 20,
+        "like_count": 140,
+        "plus_tier": "",
+        "premium_room": "ReadingTheMarkets"
+      },
+      "source": {
+        "id": 2269,
+        "title": "StockTwits Web",
+        "url": "https://stocktwits.com"
+      },
+      "symbols": [
+        {
+          "id": 686,
+          "symbol": "AAPL",
+          "title": "Apple Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 335830
+        },
+        {
+          "id": 2839,
+          "symbol": "NFLX",
+          "title": "Netflix, Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 202155
+        },
+        {
+          "id": 7825,
+          "symbol": "XOM",
+          "title": "Exxon Mobil Corporation",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 33036
+        },
+        {
+          "id": 8660,
+          "symbol": "TSLA",
+          "title": "Tesla, Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 254156
+        },
+        {
+          "id": 11746,
+          "symbol": "SNAP",
+          "title": "Snap Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 112868
+        }
+      ],
+      "links": [
+        {
+          "title": "7 Monster Stock Market Predictions For The Week of January 6",
+          "url": "https://mottcapitalmanagement.com/7-monster-stock-market-predictions-for-the-week-of-january-6/",
+          "shortened_url": "https://mottcapitalmanagement.com/7-monster-stock-market-predictions-for-the-week-of-january-6/",
+          "shortened_expanded_url": "mottcapitalmanagement.com/7...",
+          "description": "This column is my opinion and expresses my views. Those views can change at a moments notice when the market changes. I am not right all the time and I do not expect to be. I disclose all my positions clearly listed on the page, and I do not trade my account on the stocks spoken of in this column unless fully disclosed.",
+          "image": "https://i1.wp.com/mottcapitalmanagement.com/wp-content/uploads/2020/01/download-2020-01-05T143800.930.png?resize=1200%2C622&ssl=1",
+          "created_at": "2020-01-05T20:22:04Z",
+          "video_url": null,
+          "source": {
+            "name": "Monster Stock Market Commentary",
+            "website": "https://mottcapitalmanagement.com"
+          }
+        }
+      ],
+      "mentioned_users": [],
+      "entities": {
+        "chart": {
+          "thumb": "https://charts.stocktwits.com/production/small_189068692.jpg",
+          "large": "https://charts.stocktwits.com/production/large_189068692.jpg",
+          "original": "https://charts.stocktwits.com/production/original_189068692.jpg",
+          "url": "https://charts.stocktwits.com/production/original_189068692.jpg"
+        },
+        "sentiment": null
+      },
+      "filters": {
+        "day_counts": 5,
+        "official_api": true
+      }
+    },
+    {
+      "id": 189068685,
+      "body": "Thanks to the Internet\n$AAPL $TSLA $AMZN  $SPY $BTC.X",
+      "created_at": "2020-01-05T20:21:51Z",
+      "user": {
+        "id": 2859254,
+        "username": "ExpertFellow",
+        "name": "George",
+        "avatar_url": "https://avatars.stocktwits.com/production/2859254/thumb-1572763477.png",
+        "avatar_url_ssl": "https://avatars.stocktwits.com/production/2859254/thumb-1572763477.png",
+        "join_date": "2019-10-12",
+        "official": false,
+        "identity": "User",
+        "classification": [],
+        "followers": 55,
+        "following": 0,
+        "ideas": 1813,
+        "watchlist_stocks_count": 19,
+        "like_count": 363,
+        "plus_tier": "",
+        "premium_room": ""
+      },
+      "source": {
+        "id": 2269,
+        "title": "StockTwits Web",
+        "url": "https://stocktwits.com"
+      },
+      "symbols": [
+        {
+          "id": 686,
+          "symbol": "AAPL",
+          "title": "Apple Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 335830
+        },
+        {
+          "id": 864,
+          "symbol": "AMZN",
+          "title": "Amazon.com Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 234905
+        },
+        {
+          "id": 7271,
+          "symbol": "SPY",
+          "title": "SPDR S&P 500",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 153056
+        },
+        {
+          "id": 8660,
+          "symbol": "TSLA",
+          "title": "Tesla, Inc.",
+          "aliases": [],
+          "is_following": false,
+          "watchlist_count": 254156
+        },
+        {
+          "id": 11418,
+          "symbol": "BTC.X",
+          "title": "Bitcoin BTC/USD",
+          "aliases": [
+            "BTCUSD"
+          ],
+          "is_following": false,
+          "watchlist_count": 148901
+        }
+      ],
+      "likes": {
+        "total": 5,
+        "user_ids": [
+          1286275,
+          740123,
+          1452012,
+          1774444,
+          1505447
+        ]
+      },
+      "mentioned_users": [],
+      "entities": {
+        "chart": {
+          "thumb": "https://charts.stocktwits.com/production/small_189068685.png",
+          "large": "https://charts.stocktwits.com/production/large_189068685.png",
+          "original": "https://charts.stocktwits.com/production/original_189068685.png",
+          "url": "https://charts.stocktwits.com/production/original_189068685.png"
+        },
+        "sentiment": {
+          "basic": "Bullish"
+        }
+      },
+      "filters": {
+        "day_counts": 12,
+        "official_api": true
+      }
+    }
+  ]
+}
