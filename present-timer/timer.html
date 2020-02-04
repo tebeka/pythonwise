@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <title>Timer</title>
+<style>
+.timer {
+    font-family: Space-Mono;
+    font-size: 1.2em;
+    position: absolute;
+    left: 40px;
+    bottom: 30px;
+    color: red;
+}
+</style>
+    </head>
+    <body>
+	<script src="jquery-3.4.1.min.js"></script>
+	<script>
+var duration = 30;
+
+function on_hashchange() {
+    // No code section -> no timer
+    if ($('article.current div.playground').length == 0) {
+	return;
+    }
+
+    // Already have a timer running
+    if ($('article.current .timer').length != 0) {
+	return;
+    }
+
+    var v = $('<div class="timer">' + duration + '</div>');
+    $('article.current').append(v);
+    setTimeout(function() {
+	countdown(v, duration);
+    }, 1000);
+}
+
+function countdown(v, n) {
+    n -= 1;
+    v.text(n);
+    if (n == 0) {
+	return;
+    }
+
+    setTimeout(function() {
+	countdown(v, n);
+    }, 1000);
+}
+
+$(function() {
+    $(window).on('hashchange', on_hashchange);
+});
+	</script>
+    </body>
+</html>
