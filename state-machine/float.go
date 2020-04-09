@@ -7,6 +7,8 @@ import (
 
 const endSymbol = '\x00'
 
+// State is a function that get's the current string and location, and returns
+// the next position, next state and error indicator
 type State func(s string, i int) (int, State, bool)
 
 func startState(s string, i int) (int, State, bool) {
@@ -88,5 +90,5 @@ func IsFloat(s string) bool {
 		}
 	}
 
-	return state == nil && nDigits > 0
+	return state == nil && nDigits > 0 // must have at least one digit
 }
