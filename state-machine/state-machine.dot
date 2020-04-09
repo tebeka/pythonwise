@@ -1,0 +1,22 @@
+digraph float {
+    graph [fontsize=64, rankdir=LR];
+    edge [fontsize=10, fontcolor=blue];
+    node [shape=box];
+
+    start -> sign [label="-"];
+    start -> dot [label="."];
+    start -> number [label="0-9"];
+
+    sign -> number [label="0-9"];
+    sign -> dot [label="."];
+
+    number -> number [label="0-9"];
+    number -> dot [label="."];
+    number -> end [label="end"];
+
+    dot -> decimal [label="0-9"];
+    dot -> end [label="end"];
+
+    decimal -> decimal [label="0-9"];
+    decimal -> end [label="end"];
+}
