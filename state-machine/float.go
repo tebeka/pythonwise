@@ -75,7 +75,6 @@ func (s State) Equal(s2 State) bool {
 }
 
 // IsFloat returns true if s is a valid float
-// TODO: Support scientific notation (e.g "1e6")
 func IsFloat(s string) bool {
 	s = strings.TrimSpace(s) + string(endSymbol)
 	i, state, ok := 0, State(startState), true
