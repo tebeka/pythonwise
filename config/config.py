@@ -3,6 +3,7 @@
 import json
 import logging
 from dataclasses import dataclass
+from distutils.util import strtobool
 from os import environ
 
 _missing = object()
@@ -21,6 +22,8 @@ class Var:
             return
 
         conv = self.conv or type(self.value)
+        if conv is bool:
+            conv = strtobool  # Support 'yes', 'on', 'no' and friends
         self.value = conv(value)
 
 
@@ -42,6 +45,7 @@ def __getattr__(attr):
 
 # Configuration values should start with c_, everything else is ignored
 
-c_http_port = Var(8080, 'HTTP_PORT')
 c_log_level = Var(logging.INFO, 'LOG_LEVEL', lambda v: getattr(logging, v))
 c_db_hosts = Var(['db1.local', 'db2.local'], 'DB_HOSTS', json.loads)
+c_http_port = Var(8080, 'HTTP_PORT')
+c_use_ssh = Var(False, 'USE_SSH')
