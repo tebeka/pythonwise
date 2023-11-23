@@ -1,5 +1,7 @@
 # PythonWise
 
+**I no longer write in the Pythonwise blog. You can my writing at https://www.ardanlabs.com/blog/ or https://medium.com/@tebeka**
+
 This is the code from [pythonwise.blogspot.com](pythonwise.blogspot.com).
 
 Feel free to look around and use what you think is useful.
